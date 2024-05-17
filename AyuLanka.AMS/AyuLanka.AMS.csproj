@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AMSWeb\Controllers\" />
+    <Folder Include="AMSWeb\DTOs\" />
+    <Folder Include="AMSWeb\Middlewares\" />
+    <Folder Include="AMSWeb\Models\ResponseModels\" />
+    <Folder Include="AMSWeb\Models\RequestModels\" />
+    <Folder Include="BusinessSevices\Contracts\" />
+    <Folder Include="DataModels\" />
+    <Folder Include="Repositories\Contracts\" />
+    <Folder Include="Shared\" />
+  </ItemGroup>
+
+</Project>

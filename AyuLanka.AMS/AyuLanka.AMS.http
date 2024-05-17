@@ -1,0 +1,6 @@
+@AyuLanka.AMS_HostAddress = http://localhost:5173
+
+GET {{AyuLanka.AMS_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
