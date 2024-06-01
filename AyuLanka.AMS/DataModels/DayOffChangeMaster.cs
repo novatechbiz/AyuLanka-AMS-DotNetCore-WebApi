@@ -7,13 +7,23 @@ namespace AyuLanka.AMS.DataModels
     {
         [Key]
         public int Id { get; set; }
-        public int StaffRosterId { get; set; }
+
+        [Required]
+        public int StaffRosterMasterId { get; set; }
+
+        [Required]
+        public int EmployeeId { get; set; }
+
+        [Required]
         public int DayOffChangeReasonId { get; set; }
-        public int ChangeTo { get; set; }
-        public int ChangeWith { get; set; }
+
         [ForeignKey(nameof(DayOffChangeReasonId))]
         public DayOffChangeReason DayOffChangeReason { get; set; }
-        [ForeignKey(nameof(StaffRosterId))]
-        public StaffRoster StaffRoster { get; set; }
+
+        [ForeignKey(nameof(StaffRosterMasterId))]
+        public StaffRosterMaster StaffRosterMaster { get; set; }
+
+        [ForeignKey(nameof(EmployeeId))]
+        public Employee Employee { get; set; }
     }
 }

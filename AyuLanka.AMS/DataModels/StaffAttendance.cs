@@ -7,10 +7,19 @@ namespace AyuLanka.AMS.DataModels
     {
         [Key]
         public int Id { get; set; }
+
+        [Required]
         public int EmployeeId { get; set; }
-        public int AttendanceDate { get; set; }
-        public int InTime { get; set; }
-        public int OutTime { get; set; }
+
+        [Required]
+        public DateTime AttendanceDate { get; set; }
+
+        [Required]
+        public DateTime InTime { get; set; }
+
+        [Required]
+        public DateTime OutTime { get; set; }
+
         [ForeignKey(nameof(EmployeeId))]
         public Employee Employee { get; set; }
     }

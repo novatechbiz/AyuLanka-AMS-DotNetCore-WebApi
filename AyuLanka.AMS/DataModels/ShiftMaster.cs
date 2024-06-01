@@ -6,7 +6,11 @@ namespace AyuLanka.AMS.DataModels
     {
         [Key]
         public int Id { get; set; }
-        public int FromTime { get; set; }
-        public int ToTime { get; set; }
+
+        [Required]
+        public TimeSpan FromTime { get; set; }
+
+        [Required]
+        public TimeSpan ToTime { get; set; }
     }
 }

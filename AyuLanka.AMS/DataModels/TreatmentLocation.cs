@@ -7,10 +7,16 @@ namespace AyuLanka.AMS.DataModels
     {
         [Key]
         public int Id { get; set; }
+
+        [Required]
         public int LocationId { get; set; }
+
+        [Required]
         public int TreatmentTypeId { get; set; }
+
         [ForeignKey(nameof(TreatmentTypeId))]
         public TreatmentType TreatmentType { get; set; }
+
         [ForeignKey(nameof(LocationId))]
         public Location Location { get; set; }
     }

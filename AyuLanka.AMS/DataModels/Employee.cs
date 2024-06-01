@@ -7,13 +7,38 @@ namespace AyuLanka.AMS.DataModels
     {
         [Key]
         public int Id { get; set; }
+
+        [Required]
         public int ShiftMasterId { get; set; }
+
+        [Required]
         public int EmploymentTypeId { get; set; }
+
+        [Required]
         public int DesignationId { get; set; }
-        public int FullName { get; set; }
-        public int Address { get; set; }
-        public int NIC { get; set; }
-        public int JoinedDate { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public string FullName { get; set; }
+
+        [Required]
+        [MaxLength(200)]
+        public string Address { get; set; }
+
+        [Required]
+        [MaxLength(15)]
+        public string NIC { get; set; }
+
+        [Required]
+        public DateTime JoinedDate { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string Username { get; set; }
+
+        [Required]
+        [MaxLength(100)]
+        public string Password { get; set; }
 
         [ForeignKey(nameof(DesignationId))]
         public Designation Designation { get; set; }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -16,7 +17,7 @@ namespace AyuLanka.AMS.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -29,7 +30,7 @@ namespace AyuLanka.AMS.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,7 +43,7 @@ namespace AyuLanka.AMS.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -55,7 +56,7 @@ namespace AyuLanka.AMS.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,7 +69,7 @@ namespace AyuLanka.AMS.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -81,8 +82,8 @@ namespace AyuLanka.AMS.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FromTime = table.Column<int>(type: "int", nullable: false),
-                    ToTime = table.Column<int>(type: "int", nullable: false)
+                    FromTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ToTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -95,7 +96,7 @@ namespace AyuLanka.AMS.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     DurationHours = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -112,10 +113,12 @@ namespace AyuLanka.AMS.Migrations
                     ShiftMasterId = table.Column<int>(type: "int", nullable: false),
                     EmploymentTypeId = table.Column<int>(type: "int", nullable: false),
                     DesignationId = table.Column<int>(type: "int", nullable: false),
-                    FullName = table.Column<int>(type: "int", nullable: false),
-                    Address = table.Column<int>(type: "int", nullable: false),
-                    NIC = table.Column<int>(type: "int", nullable: false),
-                    JoinedDate = table.Column<int>(type: "int", nullable: false)
+                    FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    NIC = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    JoinedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Username = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -172,17 +175,17 @@ namespace AyuLanka.AMS.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ScheduleDate = table.Column<int>(type: "int", nullable: false),
+                    ScheduleDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TreatmentTypeId = table.Column<int>(type: "int", nullable: false),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    CustomerName = table.Column<int>(type: "int", nullable: false),
-                    ContactNo = table.Column<int>(type: "int", nullable: false),
-                    FromTime = table.Column<int>(type: "int", nullable: false),
-                    ToTime = table.Column<int>(type: "int", nullable: false),
+                    CustomerName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ContactNo = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    FromTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ToTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EnteredBy = table.Column<int>(type: "int", nullable: false),
-                    EnteredDate = table.Column<int>(type: "int", nullable: false),
+                    EnteredDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TokenNo = table.Column<int>(type: "int", nullable: false),
-                    TokenIssueTime = table.Column<int>(type: "int", nullable: false)
+                    TokenIssueTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -208,9 +211,9 @@ namespace AyuLanka.AMS.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    AttendanceDate = table.Column<int>(type: "int", nullable: false),
-                    InTime = table.Column<int>(type: "int", nullable: false),
-                    OutTime = table.Column<int>(type: "int", nullable: false)
+                    AttendanceDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    InTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OutTime = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -232,8 +235,8 @@ namespace AyuLanka.AMS.Migrations
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
                     LeaveTypeId = table.Column<int>(type: "int", nullable: false),
                     NoOfDays = table.Column<int>(type: "int", nullable: false),
-                    FromDate = table.Column<int>(type: "int", nullable: false),
-                    ToDate = table.Column<int>(type: "int", nullable: false)
+                    FromDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ToDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -259,9 +262,9 @@ namespace AyuLanka.AMS.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     EmployeeId = table.Column<int>(type: "int", nullable: false),
-                    RosterDate = table.Column<int>(type: "int", nullable: false),
+                    RosterDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ShiftMasterId = table.Column<int>(type: "int", nullable: false),
-                    IsDayOff = table.Column<int>(type: "int", nullable: false)
+                    IsDayOff = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -288,8 +291,8 @@ namespace AyuLanka.AMS.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     StaffRosterId = table.Column<int>(type: "int", nullable: false),
                     DayOffChangeReasonId = table.Column<int>(type: "int", nullable: false),
-                    ChangeTo = table.Column<int>(type: "int", nullable: false),
-                    ChangeWith = table.Column<int>(type: "int", nullable: false)
+                    ChangeTo = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ChangeWith = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -316,8 +319,8 @@ namespace AyuLanka.AMS.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DayOffChangeMasterId = table.Column<int>(type: "int", nullable: false),
                     StaffRosterId = table.Column<int>(type: "int", nullable: false),
-                    IsDayOffPre = table.Column<int>(type: "int", nullable: false),
-                    IsDayOffPost = table.Column<int>(type: "int", nullable: false)
+                    IsDayOffPre = table.Column<bool>(type: "bit", nullable: false),
+                    IsDayOffPost = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {

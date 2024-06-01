@@ -20,6 +20,10 @@ namespace AyuLanka.AMS.Data
         public DbSet<StaffLeave> StaffLeaves { get; set; }
         public DbSet<DayOffChangeMaster> DayOffChangeMasters { get; set; }
         public DbSet<DayOffChangeLog> DayOffChangeLogs { get; set; }
+        public DbSet<StaffRosterMaster> StaffRosterMasters { get; set; }
+        public DbSet<DayOffChangeDetail> DayOffChangeDetails { get; set; }
+        public DbSet<ShiftChangeMaster> ShiftChangeMasters { get; set; }
+        public DbSet<ShiftChangeDetail> ShiftChangeDetails { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

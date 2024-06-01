@@ -6,6 +6,9 @@ namespace AyuLanka.AMS.DataModels
     {
         [Key]
         public int Id { get; set; }
-        public int Name { get; set; }
+
+        [Required]
+        [MaxLength(100)]  // Assuming a maximum length of 100 characters for the name
+        public string Name { get; set; }
     }
 }
