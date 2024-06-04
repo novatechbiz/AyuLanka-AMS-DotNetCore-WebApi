@@ -5,6 +5,8 @@ namespace AyuLanka.AMS.BusinessSevices.Contracts
 {
     public interface IStaffRosterService
     {
+        Task<IEnumerable<StaffRoster>> GetDayOffsByDateAsync(DateTime date);
+        Task<IEnumerable<StaffRoster>> GetWorkingShiftsByDate(DateTime date);
         Task<List<StaffRosterMaster>> GetRosterDateRangesAsync();
         Task<IEnumerable<StaffRoster>> GetApprovedRosterDatesAsync(int employeeId, int rosterMasterId);
         Task<StaffRoster> GetEmployeeScheduleAsync(int employeeId, string scheduledate);

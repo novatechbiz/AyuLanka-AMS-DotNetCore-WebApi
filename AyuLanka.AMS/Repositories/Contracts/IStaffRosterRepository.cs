@@ -4,6 +4,9 @@ namespace AyuLanka.AMS.Repositories.Contracts
 {
     public interface IStaffRosterRepository
     {
+
+        Task<IEnumerable<StaffRoster>> GetDayOffsByDateAsync(DateTime date);
+        Task<IEnumerable<StaffRoster>> GetWorkingShiftsByDate(DateTime date);
         Task<IEnumerable<StaffRoster>> CreateStaffRostersAsync(IEnumerable<StaffRoster> rosters);
         Task DeleteStaffRostersByRosterMasterIdAsync(int rosterMasterId);
         Task<StaffRoster> GetRosterByIdAsync(int rosterId);

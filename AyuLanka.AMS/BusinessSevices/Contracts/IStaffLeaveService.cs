@@ -5,6 +5,7 @@ namespace AyuLanka.AMS.BusinessSevices.Contracts
 {
     public interface IStaffLeaveService
     {
+        Task<IEnumerable<StaffLeave>> GetStaffLeavesByDateAsync(DateTime date);
         Task<IEnumerable<StaffLeave>> GetAllStaffLeavesAsync();
         Task<StaffLeave> GetStaffLeaveByIdAsync(int id);
         Task<StaffLeave> AddStaffLeaveAsync(StaffLeaveRequestModel staffLeaveRequestModel);

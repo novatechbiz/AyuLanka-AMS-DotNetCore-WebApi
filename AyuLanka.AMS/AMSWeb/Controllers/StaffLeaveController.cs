@@ -16,6 +16,13 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
             _staffLeaveService = staffLeaveService;
         }
 
+        [HttpGet("getleavesbydate/{date}")]
+        public async Task<ActionResult<IEnumerable<StaffLeave>>> GetStaffLeavesByDate(DateTime date)
+        {
+            var staffLeaves = await _staffLeaveService.GetStaffLeavesByDateAsync(date);
+            return Ok(staffLeaves);
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<StaffLeave>>> GetAllStaffLeaves()
         {

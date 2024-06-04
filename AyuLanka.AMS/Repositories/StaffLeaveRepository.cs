@@ -15,6 +15,16 @@ namespace AyuLanka.AMS.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<StaffLeave>> GetStaffLeavesByDateAsync(DateTime date)
+        {
+            return await _context.StaffLeaves
+                                 .Include(s => s.Employee)
+                                 .Include(s => s.Employee.Designation)
+                                 .Include(s => s.LeaveType)
+                                 .Where(s => s.FromDate <= date && s.ToDate >= date)
+                                 .ToListAsync();
+        }
+
         public async Task<IEnumerable<StaffLeave>> GetAllStaffLeavesAsync()
         {
             return await _context.StaffLeaves

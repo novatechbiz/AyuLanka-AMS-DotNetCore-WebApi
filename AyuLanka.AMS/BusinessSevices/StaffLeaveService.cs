@@ -14,6 +14,11 @@ namespace AyuLanka.AMS.BusinessSevices
             _staffLeaveRepository = staffLeaveRepository;
         }
 
+        public async Task<IEnumerable<StaffLeave>> GetStaffLeavesByDateAsync(DateTime date)
+        {
+            return await _staffLeaveRepository.GetStaffLeavesByDateAsync(date);
+        }
+
         public async Task<IEnumerable<StaffLeave>> GetAllStaffLeavesAsync()
         {
             return await _staffLeaveRepository.GetAllStaffLeavesAsync();

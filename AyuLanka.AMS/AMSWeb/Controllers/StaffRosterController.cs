@@ -1,4 +1,5 @@
 ﻿using AyuLanka.AMS.AMSWeb.Models.RequestModels;
+using AyuLanka.AMS.BusinessSevices;
 using AyuLanka.AMS.BusinessSevices.Contracts;
 using AyuLanka.AMS.DataModels;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,20 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
         public StaffRosterController(IStaffRosterService staffRosterService)
         {
             _staffRosterService = staffRosterService;
+        }
+
+        [HttpGet("getdayoffsbydate/{date}")]
+        public async Task<ActionResult<IEnumerable<StaffRoster>>> GetDayOffsByDate(DateTime date)
+        {
+            var dayOffs = await _staffRosterService.GetDayOffsByDateAsync(date);
+            return Ok(dayOffs);
+        }
+
+        [HttpGet("getworkingshiftssbydate/{date}")]
+        public async Task<ActionResult<IEnumerable<StaffRoster>>> GetWorkingShiftsByDate(DateTime date)
+        {
+            var dayOffs = await _staffRosterService.GetWorkingShiftsByDate(date);
+            return Ok(dayOffs);
         }
 
         [HttpGet("dates")]

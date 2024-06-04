@@ -4,6 +4,7 @@ namespace AyuLanka.AMS.Repositories.Contracts
 {
     public interface IStaffLeaveRepository
     {
+        Task<IEnumerable<StaffLeave>> GetStaffLeavesByDateAsync(DateTime date);
         Task<IEnumerable<StaffLeave>> GetAllStaffLeavesAsync();
         Task<StaffLeave> GetStaffLeaveByIdAsync(int id);
         Task<StaffLeave> GetEmployeeScheduleAsync(int employeeId, string scheduleDate);

@@ -15,6 +15,28 @@ namespace AyuLanka.AMS.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<StaffRoster>> GetDayOffsByDateAsync(DateTime date)
+        {
+            return await _context.StaffRosters
+                                 .Include(d => d.StaffRosterMaster)
+                                 .Include(d => d.ShiftMaster)
+                                 .Include(d => d.Employee)
+                                 .Include(d => d.Employee.Designation)
+                                 .Where(d => d.DayOffDate == date && d.IsDayOff == true && d.StaffRosterMaster.IsApproved == true)
+                                 .ToListAsync();
+        }
+        
+        public async Task<IEnumerable<StaffRoster>> GetWorkingShiftsByDate(DateTime date)
+        {
+            return await _context.StaffRosters
+                                 .Include(d => d.StaffRosterMaster)
+                                 .Include(d => d.Employee)
+                                 .Include(d => d.Employee.Designation)
+                                 .Include(d => d.ShiftMaster)
+                                 .Where(d => d.DayOffDate == date && d.IsDayOff == false && d.StaffRosterMaster.IsApproved == true)
+                                 .ToListAsync();
+        }
+
         public async Task<IEnumerable<StaffRoster>> CreateStaffRostersAsync(IEnumerable<StaffRoster> rosters)
         {
             _context.StaffRosters.AddRange(rosters);

@@ -1,6 +1,7 @@
 ﻿using AyuLanka.AMS.AMSWeb.Models.RequestModels;
 using AyuLanka.AMS.BusinessSevices.Contracts;
 using AyuLanka.AMS.DataModels;
+using AyuLanka.AMS.Repositories;
 using AyuLanka.AMS.Repositories.Contracts;
 
 namespace AyuLanka.AMS.BusinessSevices
@@ -18,6 +19,17 @@ namespace AyuLanka.AMS.BusinessSevices
             _staffRosterRepository = staffRosterRepository;
             _staffRosterMasterRepository = staffRosterMasterRepository;
             _staffLeaveRepository = staffLeaveRepository;
+        }
+
+
+        public async Task<IEnumerable<StaffRoster>> GetDayOffsByDateAsync(DateTime date)
+        {
+            return await _staffRosterRepository.GetDayOffsByDateAsync(date);
+        }
+        
+        public async Task<IEnumerable<StaffRoster>> GetWorkingShiftsByDate(DateTime date)
+        {
+            return await _staffRosterRepository.GetWorkingShiftsByDate(date);
         }
 
         public async Task<StaffRosterMaster> SaveRoster(StaffRosterRequestModel staffRosterRequestModel)
