@@ -71,8 +71,8 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
             }
         }
 
-        [HttpGet("employeeschedule/{employeeId}/{scheduledate}")]
-        public async Task<IActionResult> GetApprovedRosterDates(int employeeId, string scheduledate)
+        [HttpGet("employeeschedule/{employeeId}")]
+        public async Task<IActionResult> GetApprovedRosterDates(int employeeId, [FromQuery] string scheduledate)
         {
             try
             {
