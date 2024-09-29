@@ -15,7 +15,8 @@ namespace AyuLanka.AMS.DataModels
         public int LeaveTypeId { get; set; }
 
         [Required]
-        public int NoOfDays { get; set; }
+        public double NoOfDays { get; set; }
+        public int? HalfDay { get; set; }
 
         [Required]
         public DateTime FromDate { get; set; }

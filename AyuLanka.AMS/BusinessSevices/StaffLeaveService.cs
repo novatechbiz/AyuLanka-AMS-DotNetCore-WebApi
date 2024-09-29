@@ -36,6 +36,7 @@ namespace AyuLanka.AMS.BusinessSevices
                 EmployeeId = staffLeaveRequestModel.EmployeeId,
                 LeaveTypeId = staffLeaveRequestModel.LeaveTypeId,
                 NoOfDays = staffLeaveRequestModel.NoOfDays,
+                HalfDay = staffLeaveRequestModel.HalfDay,
                 FromDate = staffLeaveRequestModel.FromDate,
                 ToDate = staffLeaveRequestModel.ToDate
             };
@@ -55,6 +56,7 @@ namespace AyuLanka.AMS.BusinessSevices
             staffLeave.EmployeeId = staffLeaveRequestModel.EmployeeId;
             staffLeave.LeaveTypeId = staffLeaveRequestModel.LeaveTypeId;
             staffLeave.NoOfDays = staffLeaveRequestModel.NoOfDays;
+            staffLeave.HalfDay = staffLeaveRequestModel.HalfDay;
             staffLeave.FromDate = staffLeaveRequestModel.FromDate;
             staffLeave.ToDate = staffLeaveRequestModel.ToDate;
 

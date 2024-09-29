@@ -4,6 +4,7 @@ using AyuLanka.AMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AyuLanka.AMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240928014338_add_designation_code_to_designation_table")]
+    partial class add_designation_code_to_designation_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -468,17 +471,14 @@ namespace AyuLanka.AMS.Migrations
                     b.Property<DateTime>("FromDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("HalfDay")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
                     b.Property<int>("LeaveTypeId")
                         .HasColumnType("int");
 
-                    b.Property<double>("NoOfDays")
-                        .HasColumnType("float");
+                    b.Property<int>("NoOfDays")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ToDate")
                         .HasColumnType("datetime2");

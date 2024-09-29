@@ -51,6 +51,7 @@ namespace AyuLanka.AMS.Repositories
         public async Task<Employee> GetByUsernameAsync(string username)
         {
             return await _context.Employees
+                                 .Include(e => e.Designation)
                                  .FirstOrDefaultAsync(e => e.Username == username);
         }
     }

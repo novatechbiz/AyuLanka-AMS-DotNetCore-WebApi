@@ -8,7 +8,11 @@ namespace AyuLanka.AMS.DataModels
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(100)]  // Assuming a maximum length of 100 characters for the name
+        [MaxLength(100)]
         public string Name { get; set; }
+
+        [Required]
+        [MaxLength(5)]
+        public string DesignationCode { get; set; }
     }
 }

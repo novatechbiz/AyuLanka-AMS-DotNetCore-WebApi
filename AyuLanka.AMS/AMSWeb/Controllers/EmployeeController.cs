@@ -102,14 +102,14 @@ namespace AyuLanka.AMS.Controllers
             {
                 new Claim("userId", user.Id.ToString()), // Assuming 'Id' is the user ID
                 new Claim("fullName", user.FullName), // Assuming 'FullName' is the user's full name
-                new Claim("designationId", user.DesignationId.ToString()) // Assuming 'DesignationId' is the designation ID
+                new Claim("designationCode", user.Designation.DesignationCode.ToString()) // Assuming 'DesignationId' is the designation ID
             };
 
             // Create the JWT token descriptor
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddDays(7), // Token expiration time
+                Expires = DateTime.UtcNow.AddDays(2), // Token expiration time
                 SigningCredentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature)
             };
 
