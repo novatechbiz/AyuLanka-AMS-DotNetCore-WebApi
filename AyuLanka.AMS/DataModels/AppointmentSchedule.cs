@@ -11,11 +11,7 @@ namespace AyuLanka.AMS.DataModels
         [Required]
         public DateTime ScheduleDate { get; set; }
 
-        [Required]
-        public int TreatmentTypeId { get; set; }
-
-        [Required]
-        public int EmployeeId { get; set; }
+        public int? EmployeeId { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -38,13 +34,13 @@ namespace AyuLanka.AMS.DataModels
         public DateTime EnteredDate { get; set; }
 
         public string? TokenNo { get; set; }
+        public string? Remarks { get; set; }
 
         public DateTime TokenIssueTime { get; set; }
 
-        [ForeignKey(nameof(TreatmentTypeId))]
-        public TreatmentLocation TreatmentLocation { get; set; }
-
         [ForeignKey(nameof(EmployeeId))]
         public Employee Employee { get; set; }
+
+        public ICollection<AppoinmentTreatment> AppointmentTreatments { get; set; }
     }
 }

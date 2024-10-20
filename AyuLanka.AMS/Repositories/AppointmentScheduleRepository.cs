@@ -17,22 +17,22 @@ namespace AyuLanka.AMS.Repositories
         public async Task<IEnumerable<AppointmentSchedule>> GetAllAppointmentSchedulesAsync()
         {
             return await _context.AppointmentSchedules
-                .Include(a => a.TreatmentLocation)  // Include TreatmentType in the query
-                .Include(a => a.TreatmentLocation.Location)
-                .Include(a => a.TreatmentLocation.TreatmentType)
-                .Include(a => a.Employee)       // Include Employee in the query
-                .ToListAsync();
+                        .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
+                            .ThenInclude(at => at.TreatmentLocation) // Include TreatmentLocation within AppointmentTreatments
+                                .ThenInclude(tl => tl.TreatmentType) // Include TreatmentType within TreatmentLocation
+                        .Include(a => a.Employee)       // Include Employee in the query
+                        .ToListAsync();
         }
 
-        public async Task<AppointmentSchedule> GetAppointmentScheduleByIdAsync(int id)
+        public async Task<AppointmentSchedule?> GetAppointmentScheduleByIdAsync(int id)
         {
             return await _context.AppointmentSchedules
-                .Include(a => a.TreatmentLocation)  // Include TreatmentType in the query
-                .Include(a => a.TreatmentLocation.Location)
-                .Include(a => a.TreatmentLocation.TreatmentType)
-                .Include(a => a.Employee)
-                .Where(a => a.Id == id)
-                .FirstOrDefaultAsync();
+                        .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
+                            .ThenInclude(at => at.TreatmentLocation) // Include TreatmentLocation within AppointmentTreatments
+                                .ThenInclude(tl => tl.TreatmentType) // Include TreatmentType within TreatmentLocation
+                        .Include(a => a.Employee) // Include Employee
+                        .Where(a => a.Id == id)
+                        .FirstOrDefaultAsync();
         }
 
         public async Task<AppointmentSchedule> AddAppointmentScheduleAsync(AppointmentSchedule appointmentSchedule)

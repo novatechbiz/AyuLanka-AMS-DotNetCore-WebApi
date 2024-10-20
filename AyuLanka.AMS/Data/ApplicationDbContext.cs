@@ -24,6 +24,7 @@ namespace AyuLanka.AMS.Data
         public DbSet<DayOffChangeDetail> DayOffChangeDetails { get; set; }
         public DbSet<ShiftChangeMaster> ShiftChangeMasters { get; set; }
         public DbSet<ShiftChangeDetail> ShiftChangeDetails { get; set; }
+        public DbSet<AppoinmentTreatment> AppoinmentTreatments { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
