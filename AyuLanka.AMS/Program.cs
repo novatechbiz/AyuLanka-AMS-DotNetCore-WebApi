@@ -55,6 +55,8 @@ builder.Services.AddScoped<IDayOffChangeDetailRepository, DayOffChangeDetailRepo
 builder.Services.AddScoped<IShiftChangeMasterService, ShiftChangeMasterService>();
 builder.Services.AddScoped<IShiftChangeMasterRepository, ShiftChangeMasterRepository>();
 builder.Services.AddScoped<IShiftChangeDetailRepository, ShiftChangeDetailRepository>();
+builder.Services.AddScoped<IAppoinmentTreatmentService, AppoinmentTreatmentService>();
+builder.Services.AddScoped<IAppoinmentTreatmentRepository, AppoinmentTreatmentRepository>();
 
 // Add CORS policy
 builder.Services.AddCors(options =>

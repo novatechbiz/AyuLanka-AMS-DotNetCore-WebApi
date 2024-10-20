@@ -10,10 +10,12 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
     public class AppointmentScheduleController : ControllerBase
     {
         private readonly IAppointmentScheduleService _appointmentScheduleService;
+        private readonly IAppoinmentTreatmentService _appoinmentTreatmentService;
 
-        public AppointmentScheduleController(IAppointmentScheduleService appointmentScheduleService)
+        public AppointmentScheduleController(IAppointmentScheduleService appointmentScheduleService, IAppoinmentTreatmentService appoinmentTreatmentService)
         {
             _appointmentScheduleService = appointmentScheduleService;
+            _appoinmentTreatmentService = appoinmentTreatmentService;
         }
 
         [HttpGet]
@@ -38,6 +40,14 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
         public async Task<ActionResult<AppointmentSchedule>> AddAppointmentSchedule(AppointmentScheduleRequestModel appointmentScheduleRequestModel)
         {
             var createdAppointmentSchedule = await _appointmentScheduleService.AddAppointmentScheduleAsync(appointmentScheduleRequestModel);
+
+            await _appoinmentTreatmentService.DeleteAppointmentTreatmentAsync(createdAppointmentSchedule.Id);
+            foreach (var val in appointmentScheduleRequestModel.appoinmentTreatments)
+            {
+                val.AppoinmentId = createdAppointmentSchedule.Id;
+                await _appoinmentTreatmentService.AddAppointmentTreatmentAsync(val);
+            }
+            
             return CreatedAtAction(nameof(GetAppointmentScheduleById), new { id = createdAppointmentSchedule.Id }, createdAppointmentSchedule);
         }
 
