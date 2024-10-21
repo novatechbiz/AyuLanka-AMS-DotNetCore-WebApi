@@ -37,9 +37,14 @@ namespace AyuLanka.AMS.DataModels
         public string? Remarks { get; set; }
 
         public DateTime TokenIssueTime { get; set; }
+        [Required]
+        public int LocationId { get; set; }
 
         [ForeignKey(nameof(EmployeeId))]
         public Employee Employee { get; set; }
+
+        [ForeignKey(nameof(LocationId))]
+        public Location Location { get; set; }
 
         public ICollection<AppoinmentTreatment> AppointmentTreatments { get; set; }
     }

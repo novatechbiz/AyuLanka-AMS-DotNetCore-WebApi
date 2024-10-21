@@ -34,7 +34,7 @@ namespace AyuLanka.AMS.BusinessSevices
                     ContactNo = appointmentScheduleRequestModel.ContactNo,
                     EmployeeId = appointmentScheduleRequestModel.EmployeeId != 0 ? appointmentScheduleRequestModel.EmployeeId : null,
                     ScheduleDate = appointmentScheduleRequestModel.ScheduleDate,
-                    //TreatmentTypeId = appointmentScheduleRequestModel.TreatmentTypeId,
+                    LocationId = appointmentScheduleRequestModel.LocationId,
                     FromTime = appointmentScheduleRequestModel.FromTime,
                     ToTime = appointmentScheduleRequestModel.ToTime,
                     EnteredBy = appointmentScheduleRequestModel.EnteredBy,
@@ -53,7 +53,7 @@ namespace AyuLanka.AMS.BusinessSevices
                 existingAppoinment.ContactNo = appointmentScheduleRequestModel.ContactNo;
                 existingAppoinment.EmployeeId = appointmentScheduleRequestModel.EmployeeId != 0 ? appointmentScheduleRequestModel.EmployeeId : null;
                 existingAppoinment.ScheduleDate = appointmentScheduleRequestModel.ScheduleDate;
-                //existingAppoinment.TreatmentTypeId = appointmentScheduleRequestModel.TreatmentTypeId;
+                existingAppoinment.LocationId = appointmentScheduleRequestModel.LocationId;
                 existingAppoinment.FromTime = appointmentScheduleRequestModel.FromTime;
                 existingAppoinment.ToTime = appointmentScheduleRequestModel.ToTime;
                 existingAppoinment.EnteredBy = appointmentScheduleRequestModel.EnteredBy;

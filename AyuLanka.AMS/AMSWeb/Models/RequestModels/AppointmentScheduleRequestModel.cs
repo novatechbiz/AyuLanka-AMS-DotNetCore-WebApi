@@ -16,6 +16,7 @@ namespace AyuLanka.AMS.AMSWeb.Models.RequestModels
         public string? TokenNo { get; set; }
         public DateTime TokenIssueTime { get; set; }
         public string? Remarks { get; set; }
+        public int LocationId { get; set; }
 
         public IEnumerable<AppoinmentTreatmentRequestModel> appoinmentTreatments { get; set; }
     }

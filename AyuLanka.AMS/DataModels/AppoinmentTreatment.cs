@@ -16,7 +16,7 @@ namespace AyuLanka.AMS.DataModels
         public int TreatmentTypeId { get; set; }
 
         [ForeignKey(nameof(TreatmentTypeId))]
-        public TreatmentLocation TreatmentLocation { get; set; }
+        public TreatmentType TreatmentType { get; set; }
 
         [JsonIgnore] // This will prevent serialization of this reference
         [ForeignKey(nameof(AppoinmentId))]

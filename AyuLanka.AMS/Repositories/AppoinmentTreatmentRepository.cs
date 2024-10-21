@@ -17,16 +17,14 @@ namespace AyuLanka.AMS.Repositories
         public async Task<IEnumerable<AppoinmentTreatment>> GetAllAppointmentTreatmentAsync()
         {
             return await _context.AppoinmentTreatments
-                        .Include(at => at.TreatmentLocation) // Include TreatmentLocation within AppointmentTreatments
-                                .ThenInclude(tl => tl.TreatmentType) // Include TreatmentType within TreatmentLocation
+                        .Include(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
                         .ToListAsync();
         }
 
         public async Task<AppoinmentTreatment?> GetAppointmentTreatmentByIdAsync(int id)
         {
             return await _context.AppoinmentTreatments
-                        .Include(at => at.TreatmentLocation) // Include TreatmentLocation within AppointmentTreatments
-                                .ThenInclude(tl => tl.TreatmentType) // Include TreatmentType within TreatmentLocation
+                        .Include(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
                         .Where(a => a.Id == id)
                         .FirstOrDefaultAsync();
         }

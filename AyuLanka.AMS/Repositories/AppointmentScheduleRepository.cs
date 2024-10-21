@@ -18,8 +18,7 @@ namespace AyuLanka.AMS.Repositories
         {
             return await _context.AppointmentSchedules
                         .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
-                            .ThenInclude(at => at.TreatmentLocation) // Include TreatmentLocation within AppointmentTreatments
-                                .ThenInclude(tl => tl.TreatmentType) // Include TreatmentType within TreatmentLocation
+                            .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
                         .Include(a => a.Employee)       // Include Employee in the query
                         .ToListAsync();
         }
@@ -28,8 +27,7 @@ namespace AyuLanka.AMS.Repositories
         {
             return await _context.AppointmentSchedules
                         .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
-                            .ThenInclude(at => at.TreatmentLocation) // Include TreatmentLocation within AppointmentTreatments
-                                .ThenInclude(tl => tl.TreatmentType) // Include TreatmentType within TreatmentLocation
+                            .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
                         .Include(a => a.Employee) // Include Employee
                         .Where(a => a.Id == id)
                         .FirstOrDefaultAsync();
