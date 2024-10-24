@@ -22,6 +22,7 @@ namespace AyuLanka.AMS.Repositories
                                  .Include(s => s.Employee.Designation)
                                  .Include(s => s.LeaveType)
                                  .Where(s => s.FromDate <= date && s.ToDate >= date)
+                                 .OrderBy(l => l.Employee.EmployeeNumber)
                                  .ToListAsync();
         }
 
@@ -30,6 +31,7 @@ namespace AyuLanka.AMS.Repositories
             return await _context.StaffLeaves
                                 .Include(l => l.Employee)
                                 .Include(l => l.LeaveType)
+                                .OrderBy(l => l.Employee.EmployeeNumber)
                                 .ToListAsync();
         }
 

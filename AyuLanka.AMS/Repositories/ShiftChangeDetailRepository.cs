@@ -28,6 +28,7 @@ namespace AyuLanka.AMS.Repositories
                 .Include(c => c.StaffRoster)
                 .Include(c => c.ShiftMasterPre)
                 .Include(c => c.ShiftMasterPost)
+                .OrderBy(c => c.ShiftChangeMaster.Employee.EmployeeNumber)
                 .Where(c => c.IsApproved == false).ToListAsync();
         }
 

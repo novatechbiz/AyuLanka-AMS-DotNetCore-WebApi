@@ -20,6 +20,7 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
                             .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
                         .Include(a => a.Employee)       // Include Employee in the query
+                        .OrderBy(a => a.Employee.EmployeeNumber)
                         .ToListAsync();
         }
 
@@ -29,6 +30,7 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
                             .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
                         .Include(a => a.Employee) // Include Employee
+                        .OrderBy(a => a.Employee.EmployeeNumber)
                         .Where(a => a.Id == id)
                         .FirstOrDefaultAsync();
         }

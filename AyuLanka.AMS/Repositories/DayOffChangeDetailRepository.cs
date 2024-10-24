@@ -25,6 +25,7 @@ namespace AyuLanka.AMS.Repositories
         {
             return await _context.DayOffChangeDetails
                 .Include(c => c.DayOffChangeMaster.Employee)
+                .OrderBy(c => c.DayOffChangeMaster.Employee.EmployeeNumber)
                 .Where(c => c.IsApproved == false).ToListAsync();
         }
 

@@ -16,7 +16,10 @@ namespace AyuLanka.AMS.Repositories
 
         public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
         {
-            return await _context.Employees.Include(e => e.Designation).ToListAsync();
+            return await _context.Employees
+                            .Include(e => e.Designation)
+                            .Include(e => e.EmploymentType)
+                            .OrderBy(e => e.EmployeeNumber).ToListAsync();
         }
 
         public async Task<Employee> GetEmployeeByIdAsync(int id)

@@ -23,6 +23,7 @@ namespace AyuLanka.AMS.Repositories
                                  .Include(d => d.Employee)
                                  .Include(d => d.Employee.Designation)
                                  .Where(d => d.DayOffDate == date && d.IsDayOff == true && d.StaffRosterMaster.IsApproved == true)
+                                 .OrderBy(d => d.Employee.EmployeeNumber)
                                  .ToListAsync();
         }
         
@@ -34,6 +35,7 @@ namespace AyuLanka.AMS.Repositories
                                  .Include(d => d.Employee.Designation)
                                  .Include(d => d.ShiftMaster)
                                  .Where(d => d.DayOffDate == date && d.IsDayOff == false && d.StaffRosterMaster.IsApproved == true)
+                                 .OrderBy(d => d.Employee.EmployeeNumber)
                                  .ToListAsync();
         }
 
