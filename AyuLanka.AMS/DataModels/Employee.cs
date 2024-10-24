@@ -22,6 +22,14 @@ namespace AyuLanka.AMS.DataModels
         public string FullName { get; set; }
 
         [Required]
+        [MaxLength(100)]
+        public string CallingName { get; set; }
+
+        [Required]
+        [MaxLength(50)]
+        public string EmployeeNumber { get; set; }
+
+        [Required]
         [MaxLength(200)]
         public string Address { get; set; }
 

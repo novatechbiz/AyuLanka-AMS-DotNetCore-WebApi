@@ -100,9 +100,11 @@ namespace AyuLanka.AMS.Controllers
             // Define the claims to include in the token
             var claims = new List<Claim>
             {
-                new Claim("userId", user.Id.ToString()), // Assuming 'Id' is the user ID
-                new Claim("fullName", user.FullName), // Assuming 'FullName' is the user's full name
-                new Claim("designationCode", user.Designation.DesignationCode.ToString()) // Assuming 'DesignationId' is the designation ID
+                new Claim("userId", user.Id.ToString()),
+                new Claim("fullName", user.FullName), 
+                new Claim("callingName", user.CallingName), 
+                new Claim("employeeNumber", user.EmployeeNumber), 
+                new Claim("designationCode", user.Designation.DesignationCode.ToString()) 
             };
 
             // Create the JWT token descriptor

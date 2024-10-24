@@ -31,6 +31,8 @@ namespace AyuLanka.AMS.BusinessSevices
             {
                 Address = employeeRequestModel.Address,
                 FullName = employeeRequestModel.FullName,
+                CallingName = employeeRequestModel.CallingName,
+                EmployeeNumber = employeeRequestModel.EmployeeNumber,
                 DesignationId = employeeRequestModel.DesignationId,
                 EmploymentTypeId = employeeRequestModel.EmploymentTypeId,
                 JoinedDate = employeeRequestModel.JoinedDate,
@@ -52,6 +54,8 @@ namespace AyuLanka.AMS.BusinessSevices
 
             // Update properties
             existingEmployee.FullName = employeeRequestModel.FullName;
+            existingEmployee.CallingName = employeeRequestModel.CallingName;
+            existingEmployee.EmployeeNumber = employeeRequestModel.EmployeeNumber;
             existingEmployee.Address = employeeRequestModel.Address;
             existingEmployee.NIC = employeeRequestModel.NIC;
             existingEmployee.JoinedDate = employeeRequestModel.JoinedDate;

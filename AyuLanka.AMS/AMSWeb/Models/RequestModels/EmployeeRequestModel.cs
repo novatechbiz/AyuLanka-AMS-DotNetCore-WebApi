@@ -9,6 +9,8 @@ namespace AyuLanka.AMS.AMSWeb.Models.RequestModels
         public int EmploymentTypeId { get; set; }
         public int DesignationId { get; set; }
         public string FullName { get; set; }
+        public string CallingName { get; set; }
+        public string EmployeeNumber { get; set; }
         public string Address { get; set; }
         public string NIC { get; set; }
         public DateTime JoinedDate { get; set; }
