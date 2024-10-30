@@ -7,10 +7,13 @@ namespace AyuLanka.AMS.AMSWeb.Models.RequestModels
         public int Id { get; set; }
         public DateTime ScheduleDate { get; set; }
         public int EmployeeId { get; set; }
+        public int? SecondaryEmployeeId { get; set; }
         public string CustomerName { get; set; }
         public string ContactNo { get; set; }
         public TimeSpan FromTime { get; set; }
         public TimeSpan ToTime { get; set; }
+        public TimeSpan? ActualFromTime { get; set; }
+        public TimeSpan? ActualToTime { get; set; }
         public int EnteredBy { get; set; }
         public DateTime EnteredDate { get; set; }
         public string? TokenNo { get; set; }

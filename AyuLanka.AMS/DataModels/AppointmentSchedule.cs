@@ -12,6 +12,7 @@ namespace AyuLanka.AMS.DataModels
         public DateTime ScheduleDate { get; set; }
 
         public int? EmployeeId { get; set; }
+        public int? SecondaryEmployeeId { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -26,6 +27,10 @@ namespace AyuLanka.AMS.DataModels
 
         [Required]
         public TimeSpan ToTime { get; set; }
+        
+        public TimeSpan? ActualFromTime { get; set; }
+
+        public TimeSpan? ActualToTime { get; set; }
 
         [Required]
         public int EnteredBy { get; set; }
@@ -42,6 +47,9 @@ namespace AyuLanka.AMS.DataModels
 
         [ForeignKey(nameof(EmployeeId))]
         public Employee Employee { get; set; }
+
+        [ForeignKey(nameof(SecondaryEmployeeId))] 
+        public Employee SecondaryEmployee { get; set; }
 
         [ForeignKey(nameof(LocationId))]
         public Location Location { get; set; }

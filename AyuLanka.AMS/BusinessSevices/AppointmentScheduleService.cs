@@ -33,10 +33,13 @@ namespace AyuLanka.AMS.BusinessSevices
                     CustomerName = appointmentScheduleRequestModel.CustomerName,
                     ContactNo = appointmentScheduleRequestModel.ContactNo,
                     EmployeeId = appointmentScheduleRequestModel.EmployeeId != 0 ? appointmentScheduleRequestModel.EmployeeId : null,
+                    SecondaryEmployeeId = appointmentScheduleRequestModel.SecondaryEmployeeId != 0 ? appointmentScheduleRequestModel.SecondaryEmployeeId : null,
                     ScheduleDate = appointmentScheduleRequestModel.ScheduleDate,
                     LocationId = appointmentScheduleRequestModel.LocationId,
                     FromTime = appointmentScheduleRequestModel.FromTime,
                     ToTime = appointmentScheduleRequestModel.ToTime,
+                    ActualFromTime = appointmentScheduleRequestModel.ActualFromTime,
+                    ActualToTime = appointmentScheduleRequestModel.ActualToTime,
                     EnteredBy = appointmentScheduleRequestModel.EnteredBy,
                     Remarks = appointmentScheduleRequestModel.Remarks,
                     EnteredDate = DateTime.UtcNow
@@ -52,10 +55,13 @@ namespace AyuLanka.AMS.BusinessSevices
                 existingAppoinment.CustomerName = appointmentScheduleRequestModel.CustomerName;
                 existingAppoinment.ContactNo = appointmentScheduleRequestModel.ContactNo;
                 existingAppoinment.EmployeeId = appointmentScheduleRequestModel.EmployeeId != 0 ? appointmentScheduleRequestModel.EmployeeId : null;
+                existingAppoinment.SecondaryEmployeeId = appointmentScheduleRequestModel.SecondaryEmployeeId != 0 ? appointmentScheduleRequestModel.SecondaryEmployeeId : null;
                 existingAppoinment.ScheduleDate = appointmentScheduleRequestModel.ScheduleDate;
                 existingAppoinment.LocationId = appointmentScheduleRequestModel.LocationId;
                 existingAppoinment.FromTime = appointmentScheduleRequestModel.FromTime;
                 existingAppoinment.ToTime = appointmentScheduleRequestModel.ToTime;
+                existingAppoinment.ActualFromTime = appointmentScheduleRequestModel.ActualFromTime;
+                existingAppoinment.ActualToTime = appointmentScheduleRequestModel.ActualToTime;
                 existingAppoinment.EnteredBy = appointmentScheduleRequestModel.EnteredBy;
                 existingAppoinment.EnteredDate = DateTime.UtcNow;
                 existingAppoinment.TokenNo = appointmentScheduleRequestModel.TokenNo;
