@@ -25,6 +25,17 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
             return Ok(AppointmentSchedules);
         }
 
+        [HttpGet("ByDate/{date}")]
+        public async Task<ActionResult<AppointmentSchedule>> GetAppointmentScheduleByDate(DateTime date)
+        {
+            var AppointmentSchedule = await _appointmentScheduleService.GetAppointmentScheduleByDateAsync(date);
+            if (AppointmentSchedule == null)
+            {
+                return NotFound();
+            }
+            return Ok(AppointmentSchedule);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<AppointmentSchedule>> GetAppointmentScheduleById(int id)
         {

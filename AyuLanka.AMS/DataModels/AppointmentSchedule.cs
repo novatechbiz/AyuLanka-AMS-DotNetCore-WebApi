@@ -51,6 +51,9 @@ namespace AyuLanka.AMS.DataModels
         [ForeignKey(nameof(SecondaryEmployeeId))] 
         public Employee SecondaryEmployee { get; set; }
 
+        [ForeignKey(nameof(EnteredBy))]
+        public Employee EnteredByEmployee { get; set; }
+
         [ForeignKey(nameof(LocationId))]
         public Location Location { get; set; }
 

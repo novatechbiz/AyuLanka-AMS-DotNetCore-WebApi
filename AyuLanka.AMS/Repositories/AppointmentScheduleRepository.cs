@@ -17,6 +17,7 @@ namespace AyuLanka.AMS.Repositories
         public async Task<IEnumerable<AppointmentSchedule>> GetAllAppointmentSchedulesAsync()
         {
             return await _context.AppointmentSchedules
+                        .Include(a => a.Location)
                         .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
                             .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
                         .Include(a => a.Employee)       // Include Employee in the query
@@ -27,12 +28,26 @@ namespace AyuLanka.AMS.Repositories
         public async Task<AppointmentSchedule?> GetAppointmentScheduleByIdAsync(int id)
         {
             return await _context.AppointmentSchedules
+                        .Include(a => a.Location)
                         .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
                             .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
                         .Include(a => a.Employee) // Include Employee
                         .OrderBy(a => a.Employee.EmployeeNumber)
                         .Where(a => a.Id == id)
                         .FirstOrDefaultAsync();
+        }
+        
+        public async Task<IEnumerable<AppointmentSchedule?>> GetAppointmentScheduleByDateAsync(DateTime date)
+        {
+            return await _context.AppointmentSchedules
+                        .Include(a => a.Location)
+                        .Include(a => a.EnteredByEmployee)
+                        .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
+                            .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
+                        .Include(a => a.Employee) // Include Employee
+                        .OrderBy(a => a.TokenNo)
+                        .Where(a => a.ScheduleDate >= date.Date && a.ScheduleDate < date.Date.AddDays(1))
+                        .ToListAsync();
         }
 
         public async Task<AppointmentSchedule> AddAppointmentScheduleAsync(AppointmentSchedule appointmentSchedule)

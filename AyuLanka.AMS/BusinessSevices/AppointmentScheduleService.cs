@@ -23,6 +23,11 @@ namespace AyuLanka.AMS.BusinessSevices
         {
             return await _appointmentScheduleRepository.GetAppointmentScheduleByIdAsync(id);
         }
+        
+        public async Task<IEnumerable<AppointmentSchedule?>> GetAppointmentScheduleByDateAsync(DateTime date)
+        {
+            return await _appointmentScheduleRepository.GetAppointmentScheduleByDateAsync(date);
+        }
 
         public async Task<AppointmentSchedule> AddAppointmentScheduleAsync(AppointmentScheduleRequestModel appointmentScheduleRequestModel)
         {
@@ -65,7 +70,11 @@ namespace AyuLanka.AMS.BusinessSevices
                 existingAppoinment.EnteredBy = appointmentScheduleRequestModel.EnteredBy;
                 existingAppoinment.EnteredDate = DateTime.UtcNow;
                 existingAppoinment.TokenNo = appointmentScheduleRequestModel.TokenNo;
-                existingAppoinment.TokenIssueTime = appointmentScheduleRequestModel.TokenIssueTime;
+
+                if (existingAppoinment.TokenNo == null && appointmentScheduleRequestModel.TokenNo != null)
+                {
+                    existingAppoinment.TokenIssueTime = DateTime.UtcNow;
+                }
                 existingAppoinment.Remarks = appointmentScheduleRequestModel.Remarks;
 
                 return await _appointmentScheduleRepository.UpdateAppointmentScheduleAsync(existingAppoinment);
