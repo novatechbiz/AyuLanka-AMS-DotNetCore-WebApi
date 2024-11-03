@@ -2,6 +2,7 @@
 using AyuLanka.AMS.DataModels;
 using AyuLanka.AMS.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AyuLanka.AMS.Repositories
 {
@@ -47,6 +48,19 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.Employee) // Include Employee
                         .OrderBy(a => a.TokenNo)
                         .Where(a => a.ScheduleDate >= date.Date && a.ScheduleDate < date.Date.AddDays(1))
+                        .ToListAsync();
+        }
+
+        public async Task<IEnumerable<AppointmentSchedule?>> GetAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _context.AppointmentSchedules
+                        .Include(a => a.Location)
+                        .Include(a => a.EnteredByEmployee)
+                        .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
+                            .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
+                        .Include(a => a.Employee) // Include Employee
+            .OrderBy(a => a.TokenNo)
+            .Where(a => a.ScheduleDate >= startDate.Date && a.ScheduleDate < endDate.Date.AddDays(1))
                         .ToListAsync();
         }
 

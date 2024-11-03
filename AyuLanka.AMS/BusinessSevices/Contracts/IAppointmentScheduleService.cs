@@ -8,6 +8,7 @@ namespace AyuLanka.AMS.BusinessSevices.Contracts
         Task<IEnumerable<AppointmentSchedule>> GetAllAppointmentSchedulesAsync();
         Task<AppointmentSchedule> GetAppointmentScheduleByIdAsync(int id);
         Task<IEnumerable<AppointmentSchedule>> GetAppointmentScheduleByDateAsync(DateTime date);
+        Task<IEnumerable<AppointmentSchedule>> GetAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<AppointmentSchedule> AddAppointmentScheduleAsync(AppointmentScheduleRequestModel appointmentScheduleRequestModel);
         Task<AppointmentSchedule> UpdateAppointmentScheduleAsync(AppointmentSchedule appointmentScheduleRequestModel);
         Task DeleteAppointmentScheduleAsync(int id);

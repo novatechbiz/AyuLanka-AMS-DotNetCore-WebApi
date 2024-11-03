@@ -1,4 +1,5 @@
 ﻿using AyuLanka.AMS.AMSWeb.Models.RequestModels;
+using AyuLanka.AMS.BusinessSevices;
 using AyuLanka.AMS.BusinessSevices.Contracts;
 using AyuLanka.AMS.DataModels;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,18 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
                 return NotFound();
             }
             return Ok(AppointmentSchedule);
+        }
+
+        [HttpGet("bydaterange")]
+        public async Task<ActionResult<IEnumerable<StaffLeave>>> GetStaffLeavesByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            if (startDate > endDate)
+            {
+                return BadRequest("Start date must be before end date.");
+            }
+
+            var result = await _appointmentScheduleService.GetAppointmentScheduleByDateRangeAsync(startDate, endDate);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]

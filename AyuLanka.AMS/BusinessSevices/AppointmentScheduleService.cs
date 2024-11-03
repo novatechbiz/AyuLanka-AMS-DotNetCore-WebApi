@@ -29,6 +29,10 @@ namespace AyuLanka.AMS.BusinessSevices
             return await _appointmentScheduleRepository.GetAppointmentScheduleByDateAsync(date);
         }
 
+        public async Task<IEnumerable<AppointmentSchedule?>> GetAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _appointmentScheduleRepository.GetAppointmentScheduleByDateRangeAsync(startDate, endDate);
+        }
         public async Task<AppointmentSchedule> AddAppointmentScheduleAsync(AppointmentScheduleRequestModel appointmentScheduleRequestModel)
         {
             if (appointmentScheduleRequestModel.Id == 0)
