@@ -32,6 +32,10 @@ namespace AyuLanka.AMS.DataModels
 
         public TimeSpan? ActualToTime { get; set; }
 
+        public TimeSpan? ActualFromTimeSecond { get; set; }
+
+        public TimeSpan? ActualToTimeSecond { get; set; }
+
         [Required]
         public int EnteredBy { get; set; }
 

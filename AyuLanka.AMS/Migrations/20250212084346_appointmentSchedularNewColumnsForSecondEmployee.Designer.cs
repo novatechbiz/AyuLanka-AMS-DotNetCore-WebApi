@@ -4,6 +4,7 @@ using AyuLanka.AMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AyuLanka.AMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250212084346_appointmentSchedularNewColumnsForSecondEmployee")]
+    partial class appointmentSchedularNewColumnsForSecondEmployee
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -87,6 +90,9 @@ namespace AyuLanka.AMS.Migrations
                     b.Property<TimeSpan>("FromTime")
                         .HasColumnType("time");
 
+                    b.Property<TimeSpan>("FromTimeSecond")
+                        .HasColumnType("time");
+
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
 
@@ -100,6 +106,9 @@ namespace AyuLanka.AMS.Migrations
                         .HasColumnType("int");
 
                     b.Property<TimeSpan>("ToTime")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("ToTimeSecond")
                         .HasColumnType("time");
 
                     b.Property<DateTime>("TokenIssueTime")

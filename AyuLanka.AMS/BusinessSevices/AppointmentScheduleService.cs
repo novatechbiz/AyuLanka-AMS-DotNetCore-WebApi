@@ -49,6 +49,8 @@ namespace AyuLanka.AMS.BusinessSevices
                     ToTime = appointmentScheduleRequestModel.ToTime,
                     ActualFromTime = appointmentScheduleRequestModel.ActualFromTime,
                     ActualToTime = appointmentScheduleRequestModel.ActualToTime,
+                    ActualFromTimeSecond = appointmentScheduleRequestModel.ActualFromTimeSecond,
+                    ActualToTimeSecond = appointmentScheduleRequestModel.ActualToTimeSecond,
                     EnteredBy = appointmentScheduleRequestModel.EnteredBy,
                     Remarks = appointmentScheduleRequestModel.Remarks,
                     EnteredDate = DateTime.UtcNow
@@ -71,6 +73,8 @@ namespace AyuLanka.AMS.BusinessSevices
                 existingAppoinment.ToTime = appointmentScheduleRequestModel.ToTime;
                 existingAppoinment.ActualFromTime = appointmentScheduleRequestModel.ActualFromTime;
                 existingAppoinment.ActualToTime = appointmentScheduleRequestModel.ActualToTime;
+                existingAppoinment.ActualFromTimeSecond = appointmentScheduleRequestModel.ActualFromTimeSecond;
+                existingAppoinment.ActualToTimeSecond = appointmentScheduleRequestModel.ActualToTimeSecond;
                 existingAppoinment.EnteredBy = appointmentScheduleRequestModel.EnteredBy;
                 existingAppoinment.EnteredDate = DateTime.UtcNow;
                 existingAppoinment.TokenNo = appointmentScheduleRequestModel.TokenNo;

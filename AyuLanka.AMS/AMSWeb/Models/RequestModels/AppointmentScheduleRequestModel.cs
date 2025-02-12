@@ -14,6 +14,8 @@ namespace AyuLanka.AMS.AMSWeb.Models.RequestModels
         public TimeSpan ToTime { get; set; }
         public TimeSpan? ActualFromTime { get; set; }
         public TimeSpan? ActualToTime { get; set; }
+        public TimeSpan? ActualFromTimeSecond { get; set; }
+        public TimeSpan? ActualToTimeSecond { get; set; }
         public int EnteredBy { get; set; }
         public DateTime EnteredDate { get; set; }
         public string? TokenNo { get; set; }
