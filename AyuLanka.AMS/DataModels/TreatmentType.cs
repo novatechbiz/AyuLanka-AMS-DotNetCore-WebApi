@@ -15,5 +15,7 @@ namespace AyuLanka.AMS.DataModels
         public int DurationHours { get; set; }
 
         public int? DurationMinutes { get; set; }
+        public bool IsActive { get; set; } = true;
+        public string? TreatmentShortCode { get; set; }
     }
 }

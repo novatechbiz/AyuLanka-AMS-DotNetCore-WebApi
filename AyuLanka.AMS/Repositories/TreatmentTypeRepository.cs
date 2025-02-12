@@ -16,7 +16,7 @@ namespace AyuLanka.AMS.Repositories
 
         public async Task<IEnumerable<TreatmentType>> GetAllTreatmentTypesAsync()
         {
-            return await _context.TreatmentTypes.ToListAsync();
+            return await _context.TreatmentTypes.Where(a => a.IsActive).ToListAsync();
         }
 
         public async Task<IEnumerable<TreatmentType>> GetAllTreatmentTypesByLocationAsync(int locationId)
