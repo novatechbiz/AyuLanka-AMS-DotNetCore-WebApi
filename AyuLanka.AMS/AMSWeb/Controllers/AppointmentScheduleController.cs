@@ -26,10 +26,10 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
             return Ok(AppointmentSchedules);
         }
 
-        [HttpGet("DeletedAppointmentsByDate/{date}")]
-        public async Task<ActionResult<AppointmentSchedule>> GetDeletedAppoitmentByDate(DateTime date)
+        [HttpGet("DeletedAppointmentsByDateRange")]
+        public async Task<ActionResult<AppointmentSchedule>> GetDeletedAppoitmentByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
-            var AppointmentSchedule = await _appointmentScheduleService.GetDeletedAppoitmentByDate(date);
+            var AppointmentSchedule = await _appointmentScheduleService.GetDeletedAppoitmentByDateRangeAsync(startDate, endDate);
             if (AppointmentSchedule == null)
             {
                 return NotFound();
@@ -99,9 +99,9 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteAppointmentSchedule(int id, int deletedByUserId)
+        public async Task<ActionResult> DeleteAppointmentSchedule(int id, int deletedByUserId, string remark)
         {
-            await _appointmentScheduleService.DeleteAppointmentScheduleAsync(id, deletedByUserId);
+            await _appointmentScheduleService.DeleteAppointmentScheduleAsync(id, deletedByUserId, remark);
             return NoContent();
         }
     }

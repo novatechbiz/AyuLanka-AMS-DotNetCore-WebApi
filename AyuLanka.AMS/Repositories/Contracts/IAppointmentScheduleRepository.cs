@@ -7,10 +7,10 @@ namespace AyuLanka.AMS.Repositories.Contracts
         Task<IEnumerable<AppointmentSchedule>> GetAllAppointmentSchedulesAsync();
         Task<AppointmentSchedule?> GetAppointmentScheduleByIdAsync(int id);
         Task<IEnumerable<AppointmentSchedule?>> GetAppointmentScheduleByDateAsync(DateTime date);
-        Task<IEnumerable<AppointmentSchedule?>> GetDeletedAppoitmentByDate(DateTime date);
+        Task<IEnumerable<AppointmentSchedule?>> GetDeletedAppoitmentByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<AppointmentSchedule?>> GetAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<AppointmentSchedule> AddAppointmentScheduleAsync(AppointmentSchedule appointmentSchedule);
         Task<AppointmentSchedule> UpdateAppointmentScheduleAsync(AppointmentSchedule appointmentSchedule);
-        Task DeleteAppointmentScheduleAsync(int id, int deletedByUserId);
+        Task DeleteAppointmentScheduleAsync(int id, int deletedByUserId, string remark);
     }
 }
