@@ -22,7 +22,7 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
                             .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
                         .Include(a => a.Employee)       // Include Employee in the query
-                        .Where(a => a.IsDeleted == false)
+                        .Where(a => a.IsDeleted != true)
                         .OrderBy(a => a.Employee.EmployeeNumber)
                         .ToListAsync();
         }
@@ -36,7 +36,7 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.Employee) // Include Employee
                         .OrderBy(a => a.Employee.EmployeeNumber)
                         .Where(a => a.Id == id)
-                        .Where(a => a.IsDeleted == false)
+                        .Where(a => a.IsDeleted != true)
                         .FirstOrDefaultAsync();
         }
         
@@ -50,7 +50,7 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.Employee) // Include Employee
                         .OrderBy(a => a.TokenNo)
                         .Where(a => a.ScheduleDate >= date.Date && a.ScheduleDate < date.Date.AddDays(1))
-                        .Where(a => a.IsDeleted == false)
+                        .Where(a => a.IsDeleted != true)
                         .ToListAsync();
         }
 
@@ -78,7 +78,7 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.Employee) // Include Employee
             .OrderBy(a => a.TokenNo)
             .Where(a => a.ScheduleDate >= startDate.Date && a.ScheduleDate < endDate.Date.AddDays(1))
-            .Where(a => a.IsDeleted == false)
+            .Where(a => a.IsDeleted != true)
                         .ToListAsync();
         }
 
