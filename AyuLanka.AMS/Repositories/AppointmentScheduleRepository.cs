@@ -22,6 +22,7 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
                             .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
                         .Include(a => a.Employee)       // Include Employee in the query
+                        .Where(a => a.IsDeleted == false)
                         .OrderBy(a => a.Employee.EmployeeNumber)
                         .ToListAsync();
         }
@@ -35,6 +36,7 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.Employee) // Include Employee
                         .OrderBy(a => a.Employee.EmployeeNumber)
                         .Where(a => a.Id == id)
+                        .Where(a => a.IsDeleted == false)
                         .FirstOrDefaultAsync();
         }
         
@@ -48,6 +50,21 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.Employee) // Include Employee
                         .OrderBy(a => a.TokenNo)
                         .Where(a => a.ScheduleDate >= date.Date && a.ScheduleDate < date.Date.AddDays(1))
+                        .Where(a => a.IsDeleted == false)
+                        .ToListAsync();
+        }
+
+        public async Task<IEnumerable<AppointmentSchedule?>> GetDeletedAppoitmentByDate(DateTime date)
+        {
+            return await _context.AppointmentSchedules
+                        .Include(a => a.Location)
+                        .Include(a => a.EnteredByEmployee)
+                        .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
+                            .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
+                        .Include(a => a.Employee) // Include Employee
+                        .OrderBy(a => a.TokenNo)
+                        .Where(a => a.ScheduleDate >= date.Date && a.ScheduleDate < date.Date.AddDays(1))
+                        .Where(a => a.IsDeleted == true)
                         .ToListAsync();
         }
 
@@ -61,6 +78,7 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.Employee) // Include Employee
             .OrderBy(a => a.TokenNo)
             .Where(a => a.ScheduleDate >= startDate.Date && a.ScheduleDate < endDate.Date.AddDays(1))
+            .Where(a => a.IsDeleted == false)
                         .ToListAsync();
         }
 
@@ -78,14 +96,19 @@ namespace AyuLanka.AMS.Repositories
             return appointmentSchedule;
         }
 
-        public async Task DeleteAppointmentScheduleAsync(int id)
+        public async Task DeleteAppointmentScheduleAsync(int id, int deletedByUserId)
         {
             var appointmentSchedule = await _context.AppointmentSchedules.FindAsync(id);
             if (appointmentSchedule != null)
             {
-                _context.AppointmentSchedules.Remove(appointmentSchedule);
+                appointmentSchedule.IsDeleted = true;
+                appointmentSchedule.DeletedBy = deletedByUserId;
+                appointmentSchedule.DeletedDate = DateTime.Now;
+
+                _context.Entry(appointmentSchedule).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
         }
+
     }
 }

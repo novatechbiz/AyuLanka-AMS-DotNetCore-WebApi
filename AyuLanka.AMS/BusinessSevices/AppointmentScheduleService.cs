@@ -29,6 +29,11 @@ namespace AyuLanka.AMS.BusinessSevices
             return await _appointmentScheduleRepository.GetAppointmentScheduleByDateAsync(date);
         }
 
+        public async Task<IEnumerable<AppointmentSchedule?>> GetDeletedAppoitmentByDate(DateTime date)
+        {
+            return await _appointmentScheduleRepository.GetDeletedAppoitmentByDate(date);
+        }
+
         public async Task<IEnumerable<AppointmentSchedule?>> GetAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate)
         {
             return await _appointmentScheduleRepository.GetAppointmentScheduleByDateRangeAsync(startDate, endDate);
@@ -94,9 +99,9 @@ namespace AyuLanka.AMS.BusinessSevices
             return await _appointmentScheduleRepository.UpdateAppointmentScheduleAsync(AppointmentSchedule);
         }
 
-        public async Task DeleteAppointmentScheduleAsync(int id)
+        public async Task DeleteAppointmentScheduleAsync(int id, int deletedByUserId)
         {
-            await _appointmentScheduleRepository.DeleteAppointmentScheduleAsync(id);
+            await _appointmentScheduleRepository.DeleteAppointmentScheduleAsync(id, deletedByUserId);
         }
     }
 }

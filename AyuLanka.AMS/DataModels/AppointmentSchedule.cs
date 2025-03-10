@@ -41,6 +41,9 @@ namespace AyuLanka.AMS.DataModels
 
         [Required]
         public DateTime EnteredDate { get; set; }
+        public bool? IsDeleted { get; set; }
+        public int? DeletedBy { get; set; }
+        public DateTime? DeletedDate { get; set; }
 
         public string? TokenNo { get; set; }
         public string? Remarks { get; set; }
@@ -57,6 +60,9 @@ namespace AyuLanka.AMS.DataModels
 
         [ForeignKey(nameof(EnteredBy))]
         public Employee EnteredByEmployee { get; set; }
+
+        [ForeignKey(nameof(DeletedBy))]
+        public Employee DeletedByEmployee { get; set; }
 
         [ForeignKey(nameof(LocationId))]
         public Location Location { get; set; }
