@@ -23,7 +23,7 @@ namespace AyuLanka.AMS.Repositories
         {
             // Query the join table and then select only the TreatmentTypes
             var treatmentTypes = await _context.TreatmentLocations
-                .Where(tl => tl.LocationId == locationId)  // Filter by LocationId
+                .Where(tl => tl.LocationId == locationId && tl.TreatmentType.IsActive)  // Filter by LocationId
                 .Select(tl => tl.TreatmentType)            // Project only the TreatmentType
                 .Distinct()                                // Ensure there are no duplicates
                 .ToListAsync();

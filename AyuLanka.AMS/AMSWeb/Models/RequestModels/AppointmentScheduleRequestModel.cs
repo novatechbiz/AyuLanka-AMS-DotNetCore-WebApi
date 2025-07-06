@@ -8,6 +8,7 @@ namespace AyuLanka.AMS.AMSWeb.Models.RequestModels
         public DateTime ScheduleDate { get; set; }
         public int EmployeeId { get; set; }
         public int? SecondaryEmployeeId { get; set; }
+        public int? DoctorEmployeeId { get; set; }
         public string CustomerName { get; set; }
         public string ContactNo { get; set; }
         public TimeSpan FromTime { get; set; }

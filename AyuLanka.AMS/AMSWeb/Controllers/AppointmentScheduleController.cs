@@ -60,6 +60,30 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
             return Ok(result);
         }
 
+        [HttpGet("getAllPreScheduledScheduledAppointments")]
+        public async Task<ActionResult<IEnumerable<StaffLeave>>> GetAllPreScheduledAppointment([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            if (startDate > endDate)
+            {
+                return BadRequest("Start date must be before end date.");
+            }
+
+            var result = await _appointmentScheduleService.GetAllPreScheduledAppointmentAsync(startDate, endDate);
+            return Ok(result);
+        }
+
+        [HttpGet("getCompletedPreScheduledScheduledAppointments")]
+        public async Task<ActionResult<IEnumerable<StaffLeave>>> GetCompletedPreScheduledAppointment([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            if (startDate > endDate)
+            {
+                return BadRequest("Start date must be before end date.");
+            }
+
+            var result = await _appointmentScheduleService.GetCompletedPreScheduledAppointmentAsync(startDate, endDate);
+            return Ok(result);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<AppointmentSchedule>> GetAppointmentScheduleById(int id)
         {

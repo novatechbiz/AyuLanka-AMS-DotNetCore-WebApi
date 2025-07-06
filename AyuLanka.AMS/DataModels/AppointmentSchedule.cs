@@ -13,6 +13,7 @@ namespace AyuLanka.AMS.DataModels
 
         public int? EmployeeId { get; set; }
         public int? SecondaryEmployeeId { get; set; }
+        public int? DoctorEmployeeId { get; set; }
 
         [Required]
         [MaxLength(100)]
@@ -38,8 +39,9 @@ namespace AyuLanka.AMS.DataModels
 
         [Required]
         public int EnteredBy { get; set; }
+        public DateTime? UpdatedDate { get; set; }
+        public int? UpdatedBy { get; set; }
 
-        [Required]
         public DateTime EnteredDate { get; set; }
         public bool? IsDeleted { get; set; }
         public int? DeletedBy { get; set; }
@@ -57,9 +59,14 @@ namespace AyuLanka.AMS.DataModels
 
         [ForeignKey(nameof(SecondaryEmployeeId))] 
         public Employee SecondaryEmployee { get; set; }
+        [ForeignKey(nameof(DoctorEmployeeId))]
+        public Employee DoctorEmployee { get; set; }
 
         [ForeignKey(nameof(EnteredBy))]
         public Employee EnteredByEmployee { get; set; }
+
+        [ForeignKey(nameof(UpdatedBy))]
+        public Employee UpdatedByEmployee { get; set; }
 
         [ForeignKey(nameof(DeletedBy))]
         public Employee DeletedByEmployee { get; set; }
