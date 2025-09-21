@@ -25,6 +25,7 @@ namespace AyuLanka.AMS.Data
         public DbSet<ShiftChangeMaster> ShiftChangeMasters { get; set; }
         public DbSet<ShiftChangeDetail> ShiftChangeDetails { get; set; }
         public DbSet<AppoinmentTreatment> AppoinmentTreatments { get; set; }
+        public DbSet<LocationType> LocationTypes { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
@@ -63,6 +64,12 @@ namespace AyuLanka.AMS.Data
                 .HasOne(dcl => dcl.DayOffChangeMaster)
                 .WithMany()
                 .HasForeignKey(dcl => dcl.DayOffChangeMasterId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Location>()
+                .HasOne(l => l.LocationType)
+                .WithMany(lt => lt.Locations)
+                .HasForeignKey(l => l.LocationTypeId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }

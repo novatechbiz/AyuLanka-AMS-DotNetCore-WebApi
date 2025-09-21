@@ -48,6 +48,39 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
             return Ok(AppointmentSchedule);
         }
 
+        [HttpGet("PrimeCareByDate/{date}")]
+        public async Task<ActionResult<AppointmentSchedule>> GetPrimeCareAppointmentScheduleByDate(DateTime date)
+        {
+            var AppointmentSchedule = await _appointmentScheduleService.GetPrimeCareAppointmentScheduleByDateAsync(date);
+            if (AppointmentSchedule == null)
+            {
+                return NotFound();
+            }
+            return Ok(AppointmentSchedule);
+        }
+
+        [HttpGet("tokensbydate")]
+        public async Task<ActionResult<AppointmentSchedule>> GetTokensByDate([FromQuery] DateTime date)
+        {
+            var AppointmentSchedule = await _appointmentScheduleService.GetTokensByDateAsync(date);
+            if (AppointmentSchedule == null)
+            {
+                return NotFound();
+            }
+            return Ok(AppointmentSchedule);
+        }
+
+        [HttpGet("issuedtokens")]
+        public async Task<ActionResult<AppointmentSchedule>> GetIssuedTokensByDate()
+        {
+            var AppointmentSchedule = await _appointmentScheduleService.GetIssuedTokensByDateAsync();
+            if (AppointmentSchedule == null)
+            {
+                return NotFound();
+            }
+            return Ok(AppointmentSchedule);
+        }
+
         [HttpGet("bydaterange")]
         public async Task<ActionResult<IEnumerable<StaffLeave>>> GetStaffLeavesByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
@@ -57,6 +90,18 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
             }
 
             var result = await _appointmentScheduleService.GetAppointmentScheduleByDateRangeAsync(startDate, endDate);
+            return Ok(result);
+        }
+
+        [HttpGet("primecarebydaterange")]
+        public async Task<ActionResult<IEnumerable<StaffLeave>>> GetPrimeCareAppointmentScheduleByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            if (startDate > endDate)
+            {
+                return BadRequest("Start date must be before end date.");
+            }
+
+            var result = await _appointmentScheduleService.GetPrimeCareAppointmentScheduleByDateRangeAsync(startDate, endDate);
             return Ok(result);
         }
 

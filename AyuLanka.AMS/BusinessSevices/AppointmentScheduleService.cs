@@ -8,10 +8,12 @@ namespace AyuLanka.AMS.BusinessSevices
     public class AppointmentScheduleService : IAppointmentScheduleService
     {
         private readonly IAppointmentScheduleRepository _appointmentScheduleRepository;
+        private readonly ILocationRepository _locationRepository;
 
-        public AppointmentScheduleService(IAppointmentScheduleRepository appointmentScheduleRepository)
+        public AppointmentScheduleService(IAppointmentScheduleRepository appointmentScheduleRepository, ILocationRepository locationRepository)
         {
             _appointmentScheduleRepository = appointmentScheduleRepository;
+            _locationRepository = locationRepository;
         }
 
         public async Task<IEnumerable<AppointmentSchedule>> GetAllAppointmentSchedulesAsync()
@@ -27,6 +29,21 @@ namespace AyuLanka.AMS.BusinessSevices
         public async Task<IEnumerable<AppointmentSchedule?>> GetAppointmentScheduleByDateAsync(DateTime date)
         {
             return await _appointmentScheduleRepository.GetAppointmentScheduleByDateAsync(date);
+        }
+
+        public async Task<IEnumerable<AppointmentSchedule?>> GetPrimeCareAppointmentScheduleByDateAsync(DateTime date)
+        {
+            return await _appointmentScheduleRepository.GetPrimeCareAppointmentScheduleByDateAsync(date);
+        }
+
+        public async Task<IEnumerable<AppointmentSchedule?>> GetTokensByDateAsync(DateTime date)
+        {
+            return await _appointmentScheduleRepository.GetTokensByDateAsync(date);
+        }
+
+        public async Task<IEnumerable<AppointmentSchedule?>> GetIssuedTokensByDateAsync()
+        {
+            return await _appointmentScheduleRepository.GetIssuedTokensByDateAsync();
         }
 
         public async Task<IEnumerable<AppointmentSchedule?>> GetDeletedAppoitmentByDateRangeAsync(DateTime startDate, DateTime endDate)
@@ -48,10 +65,26 @@ namespace AyuLanka.AMS.BusinessSevices
         {
             return await _appointmentScheduleRepository.GetAppointmentScheduleByDateRangeAsync(startDate, endDate);
         }
+
+        public async Task<IEnumerable<AppointmentSchedule?>> GetPrimeCareAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _appointmentScheduleRepository.GetPrimeCareAppointmentScheduleByDateRangeAsync(startDate, endDate);
+        }
+
         public async Task<AppointmentSchedule> AddAppointmentScheduleAsync(AppointmentScheduleRequestModel appointmentScheduleRequestModel)
         {
             if (appointmentScheduleRequestModel.Id == 0)
             {
+                int location_id;
+                if (appointmentScheduleRequestModel.MainTreatmentArea.HasValue && appointmentScheduleRequestModel.MainTreatmentArea == 1)
+                {
+                    var location = await _locationRepository.GetPrimeCareLocationByNameAsync("Doctor Room Waiting");
+                    location_id = location.Id;
+                }else
+                {
+                    location_id = (int)appointmentScheduleRequestModel.LocationId;
+                }
+
                 var AppointmentSchedule = new AppointmentSchedule()
                 {
                     CustomerName = appointmentScheduleRequestModel.CustomerName,
@@ -60,7 +93,7 @@ namespace AyuLanka.AMS.BusinessSevices
                     SecondaryEmployeeId = appointmentScheduleRequestModel.SecondaryEmployeeId != 0 ? appointmentScheduleRequestModel.SecondaryEmployeeId : null,
                     DoctorEmployeeId = appointmentScheduleRequestModel.DoctorEmployeeId != 0 ? appointmentScheduleRequestModel.DoctorEmployeeId : null,
                     ScheduleDate = appointmentScheduleRequestModel.ScheduleDate,
-                    LocationId = appointmentScheduleRequestModel.LocationId,
+                    LocationId = location_id,
                     FromTime = appointmentScheduleRequestModel.FromTime,
                     ToTime = appointmentScheduleRequestModel.ToTime,
                     ActualFromTime = appointmentScheduleRequestModel.ActualFromTime,
@@ -69,8 +102,11 @@ namespace AyuLanka.AMS.BusinessSevices
                     ActualToTimeSecond = appointmentScheduleRequestModel.ActualToTimeSecond,
                     EnteredBy = appointmentScheduleRequestModel.EnteredBy,
                     Remarks = appointmentScheduleRequestModel.Remarks,
-                    EnteredDate = DateTime.Now
-                };
+                    EnteredDate = DateTime.Now,
+                    TokenNo = appointmentScheduleRequestModel.TokenNo,
+                    TokenIssueTime = DateTime.Now,
+                    MainTreatmentArea = appointmentScheduleRequestModel?.MainTreatmentArea,
+            };
 
 
                 return await _appointmentScheduleRepository.AddAppointmentScheduleAsync(AppointmentSchedule);
@@ -78,6 +114,8 @@ namespace AyuLanka.AMS.BusinessSevices
             {
                 var existingAppoinment = await _appointmentScheduleRepository.GetAppointmentScheduleByIdAsync(appointmentScheduleRequestModel.Id);
 
+                // Get max chitNo from repository
+                var maxChitNo = await _appointmentScheduleRepository.GetMaxChitNoAsync(appointmentScheduleRequestModel.ScheduleDate);
 
                 existingAppoinment.CustomerName = appointmentScheduleRequestModel.CustomerName;
                 existingAppoinment.ContactNo = appointmentScheduleRequestModel.ContactNo;
@@ -95,6 +133,11 @@ namespace AyuLanka.AMS.BusinessSevices
                 existingAppoinment.UpdatedBy = appointmentScheduleRequestModel.EnteredBy;
                 existingAppoinment.UpdatedDate = DateTime.Now;
                 existingAppoinment.TokenNo = appointmentScheduleRequestModel.TokenNo;
+
+                if (appointmentScheduleRequestModel.IsTokenIssued)
+                {
+                    existingAppoinment.ChitNo = maxChitNo + 1;
+                }
 
                 if (existingAppoinment.TokenNo == null && appointmentScheduleRequestModel.TokenNo != null)
                 {

@@ -16,7 +16,26 @@ namespace AyuLanka.AMS.Repositories
 
         public async Task<IEnumerable<Location>> GetAllLocationAsync()
         {
-            return await _context.Locations.ToListAsync();
+            return await _context.Locations
+                .OrderBy(p => p.IsTreatmentLocation)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Location>> GetPrimeCareLocationAsync()
+        {
+            return await _context.Locations.Where(p => p.LocationTypeId == 1).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Location>> GetEliteCareLocationAsync()
+        {
+            return await _context.Locations.Where(p => p.LocationTypeId == 2).ToListAsync();
+        }
+
+        public async Task<Location> GetPrimeCareLocationByNameAsync(string locationName)
+        {
+            return await _context.Locations
+                .Where(p => p.Name == locationName)
+                .FirstOrDefaultAsync();
         }
     }
 }

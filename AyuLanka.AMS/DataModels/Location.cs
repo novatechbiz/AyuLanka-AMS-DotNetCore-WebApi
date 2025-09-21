@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AyuLanka.AMS.DataModels
 {
@@ -8,7 +9,15 @@ namespace AyuLanka.AMS.DataModels
         public int Id { get; set; }
 
         [Required]
-        [MaxLength(100)]  // Assuming a maximum length of 100 characters for the name
+        [MaxLength(100)]
         public string Name { get; set; }
+
+        // Foreign key
+        public int? LocationTypeId { get; set; }
+
+        public bool? IsTreatmentLocation { get; set; }
+
+        [ForeignKey("LocationTypeId")]
+        public LocationType? LocationType { get; set; }
     }
 }

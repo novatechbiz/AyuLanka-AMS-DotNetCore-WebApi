@@ -51,6 +51,53 @@ namespace AyuLanka.AMS.Repositories
                         .OrderBy(a => a.TokenNo)
                         .Where(a => a.ScheduleDate >= date.Date && a.ScheduleDate < date.Date.AddDays(1))
                         .Where(a => a.IsDeleted != true)
+                        .Where(a => a.Location != null && a.Location.LocationTypeId == 2)
+                        .ToListAsync();
+        }
+
+        public async Task<IEnumerable<AppointmentSchedule?>> GetPrimeCareAppointmentScheduleByDateAsync(DateTime date)
+        {
+            return await _context.AppointmentSchedules
+                        .Include(a => a.Location)
+                        .Include(a => a.EnteredByEmployee)
+                        .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
+                            .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
+                        .Include(a => a.Employee) // Include Employee
+                        .OrderBy(a => a.TokenNo)
+                        .Where(a => a.ScheduleDate >= date.Date && a.ScheduleDate < date.Date.AddDays(1))
+                        .Where(a => a.IsDeleted != true)
+                        .Where(a => a.Location != null && a.Location.LocationTypeId == 1)
+                        .ToListAsync();
+        }
+
+        public async Task<IEnumerable<AppointmentSchedule?>> GetTokensByDateAsync(DateTime date)
+        {
+            return await _context.AppointmentSchedules
+                        .Include(a => a.Location)
+                        .Include(a => a.EnteredByEmployee)
+                        .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
+                            .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
+                        .Include(a => a.Employee) // Include Employee
+                        .OrderBy(a => a.TokenNo)
+                        .Where(a => a.ScheduleDate >= date.Date && a.ScheduleDate < date.Date.AddDays(1))
+                        .Where(a => a.TokenNo != null)
+                        .Where(a => a.IsDeleted != true)
+                        .ToListAsync();
+        }
+
+        public async Task<IEnumerable<AppointmentSchedule?>> GetIssuedTokensByDateAsync()
+        {
+            return await _context.AppointmentSchedules
+                        .Include(a => a.Location)
+                        .Include(a => a.EnteredByEmployee)
+                        .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
+                            .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
+                        .Include(a => a.Employee) // Include Employee
+                        .OrderBy(a => a.TokenNo)
+                        .Where(a => a.ScheduleDate >= DateTime.Now.Date && a.ScheduleDate < DateTime.Now.Date.AddDays(1))
+                        .Where(a => a.TokenNo != null)
+                        .Where(a => a.ChitNo != null)
+                        .Where(a => a.IsDeleted != true)
                         .ToListAsync();
         }
 
@@ -79,6 +126,22 @@ namespace AyuLanka.AMS.Repositories
             .OrderBy(a => a.TokenNo)
             .Where(a => a.ScheduleDate >= startDate.Date && a.ScheduleDate < endDate.Date.AddDays(1))
             .Where(a => a.IsDeleted != true)
+            .Where(a => a.Location != null && a.Location.LocationTypeId == 2)
+                        .ToListAsync();
+        }
+
+        public async Task<IEnumerable<AppointmentSchedule?>> GetPrimeCareAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _context.AppointmentSchedules
+                        .Include(a => a.Location)
+                        .Include(a => a.EnteredByEmployee)
+                        .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
+                            .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
+                        .Include(a => a.Employee) // Include Employee
+            .OrderBy(a => a.TokenNo)
+            .Where(a => a.ScheduleDate >= startDate.Date && a.ScheduleDate < endDate.Date.AddDays(1))
+            .Where(a => a.IsDeleted != true)
+            .Where(a => a.Location != null && a.Location.LocationTypeId == 1)
                         .ToListAsync();
         }
 
@@ -138,6 +201,14 @@ namespace AyuLanka.AMS.Repositories
                 _context.Entry(appointmentSchedule).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<int> GetMaxChitNoAsync(DateTime scheduleDate)
+        {
+            var maxChitNo = await _context.AppointmentSchedules
+                .Where(a => a.ScheduleDate.Date == scheduleDate.Date)
+                .MaxAsync(a => (int?)a.ChitNo) ?? 0;
+            return maxChitNo;
         }
 
     }

@@ -4,6 +4,7 @@ using AyuLanka.AMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AyuLanka.AMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250914065850_UpdateAppointmentScheduleTokenNoAndLocation")]
+    partial class UpdateAppointmentScheduleTokenNoAndLocation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,9 +68,6 @@ namespace AyuLanka.AMS.Migrations
                     b.Property<TimeSpan?>("ActualToTimeSecond")
                         .HasColumnType("time");
 
-                    b.Property<int?>("ChitNo")
-                        .HasColumnType("int");
-
                     b.Property<string>("ContactNo")
                         .IsRequired()
                         .HasMaxLength(15)
@@ -103,9 +103,6 @@ namespace AyuLanka.AMS.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int?>("LocationId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MainTreatmentArea")
                         .HasColumnType("int");
 
                     b.Property<string>("Remarks")
@@ -400,9 +397,6 @@ namespace AyuLanka.AMS.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool?>("IsTreatmentLocation")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("LocationTypeId")
                         .HasColumnType("int");

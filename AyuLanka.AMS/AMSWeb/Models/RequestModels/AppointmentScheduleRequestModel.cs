@@ -6,7 +6,7 @@ namespace AyuLanka.AMS.AMSWeb.Models.RequestModels
     {
         public int Id { get; set; }
         public DateTime ScheduleDate { get; set; }
-        public int EmployeeId { get; set; }
+        public int? EmployeeId { get; set; }
         public int? SecondaryEmployeeId { get; set; }
         public int? DoctorEmployeeId { get; set; }
         public string CustomerName { get; set; }
@@ -19,10 +19,12 @@ namespace AyuLanka.AMS.AMSWeb.Models.RequestModels
         public TimeSpan? ActualToTimeSecond { get; set; }
         public int EnteredBy { get; set; }
         public DateTime EnteredDate { get; set; }
-        public string? TokenNo { get; set; }
+        public int? TokenNo { get; set; }
+        public bool IsTokenIssued { get; set; }
         public DateTime TokenIssueTime { get; set; }
         public string? Remarks { get; set; }
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
+        public int? MainTreatmentArea { get; set; }
 
         public IEnumerable<AppoinmentTreatmentRequestModel> appoinmentTreatments { get; set; }
     }

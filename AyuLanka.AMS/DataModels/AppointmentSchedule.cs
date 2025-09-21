@@ -47,12 +47,14 @@ namespace AyuLanka.AMS.DataModels
         public int? DeletedBy { get; set; }
         public DateTime? DeletedDate { get; set; }
 
-        public string? TokenNo { get; set; }
+        public int? TokenNo { get; set; }
+        public int? ChitNo { get; set; }
         public string? Remarks { get; set; }
 
         public DateTime TokenIssueTime { get; set; }
-        [Required]
-        public int LocationId { get; set; }
+        public int? LocationId { get; set; }
+
+        public int? MainTreatmentArea { get; set; }
 
         [ForeignKey(nameof(EmployeeId))]
         public Employee Employee { get; set; }
@@ -72,7 +74,7 @@ namespace AyuLanka.AMS.DataModels
         public Employee DeletedByEmployee { get; set; }
 
         [ForeignKey(nameof(LocationId))]
-        public Location Location { get; set; }
+        public Location? Location { get; set; }
 
         public ICollection<AppoinmentTreatment> AppointmentTreatments { get; set; }
     }

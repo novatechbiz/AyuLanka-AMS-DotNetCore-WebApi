@@ -22,5 +22,19 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
             return Ok(Locations);
         }
 
+        [HttpGet("primecare")]
+        public async Task<ActionResult<IEnumerable<Location>>> GetPrimeCareLocationAsync()
+        {
+            var Locations = await _locationService.GetPrimeCareLocationAsync();
+            return Ok(Locations);
+        }
+
+        [HttpGet("elitecare")]
+        public async Task<ActionResult<IEnumerable<Location>>> GetEliteCareLocationAsync()
+        {
+            var Locations = await _locationService.GetEliteCareLocationAsync();
+            return Ok(Locations);
+        }
+
     }
 }

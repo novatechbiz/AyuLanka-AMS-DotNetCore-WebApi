@@ -4,6 +4,7 @@ using AyuLanka.AMS.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AyuLanka.AMS.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250906162707_MakeLocationTypeOptional")]
+    partial class MakeLocationTypeOptional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,9 +68,6 @@ namespace AyuLanka.AMS.Migrations
                     b.Property<TimeSpan?>("ActualToTimeSecond")
                         .HasColumnType("time");
 
-                    b.Property<int?>("ChitNo")
-                        .HasColumnType("int");
-
                     b.Property<string>("ContactNo")
                         .IsRequired()
                         .HasMaxLength(15)
@@ -102,10 +102,7 @@ namespace AyuLanka.AMS.Migrations
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("LocationId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MainTreatmentArea")
+                    b.Property<int>("LocationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Remarks")
@@ -123,8 +120,8 @@ namespace AyuLanka.AMS.Migrations
                     b.Property<DateTime>("TokenIssueTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("TokenNo")
-                        .HasColumnType("int");
+                    b.Property<string>("TokenNo")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("UpdatedBy")
                         .HasColumnType("int");
@@ -400,9 +397,6 @@ namespace AyuLanka.AMS.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<bool?>("IsTreatmentLocation")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("LocationTypeId")
                         .HasColumnType("int");
@@ -759,7 +753,9 @@ namespace AyuLanka.AMS.Migrations
 
                     b.HasOne("AyuLanka.AMS.DataModels.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("LocationId");
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("AyuLanka.AMS.DataModels.Employee", "SecondaryEmployee")
                         .WithMany()
