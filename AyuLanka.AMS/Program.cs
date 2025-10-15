@@ -64,7 +64,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowReactApp",
         policyBuilder =>
         {
-            policyBuilder.WithOrigins("http://localhost:3000", "http://173.212.241.66:8025", "http://oms.ayulankamedical.com", "http://oms-uat.ayulankamedical.com/") // React app's URL
+            policyBuilder.WithOrigins("http://localhost:3000", "http://173.212.241.66:8025", "http://oms.ayulankamedical.com", "http://oms-uat.ayulankamedical.com") // React app's URL
                    .AllowAnyHeader()
                    .AllowAnyMethod();
         });
