@@ -157,6 +157,7 @@ namespace AyuLanka.AMS.Repositories
             .Where(a => a.ScheduleDate >= startDate.Date && a.ScheduleDate < endDate.Date.AddDays(1))
             .Where(a => a.ActualFromTime != null && a.ActualToTime != null)
             .Where(a => a.EnteredDate < a.ScheduleDate)
+            .Where(a => a.IsDeleted != true)
                         .ToListAsync();
         }
 
@@ -171,6 +172,7 @@ namespace AyuLanka.AMS.Repositories
             .OrderBy(a => a.TokenNo)
             .Where(a => a.ScheduleDate >= startDate.Date && a.ScheduleDate < endDate.Date.AddDays(1))
             .Where(a => a.EnteredDate < a.ScheduleDate)
+            .Where(a => a.IsDeleted != true)
                         .ToListAsync();
         }
 

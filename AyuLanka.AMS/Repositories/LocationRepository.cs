@@ -23,12 +23,12 @@ namespace AyuLanka.AMS.Repositories
 
         public async Task<IEnumerable<Location>> GetPrimeCareLocationAsync()
         {
-            return await _context.Locations.Where(p => p.LocationTypeId == 1).ToListAsync();
+            return await _context.Locations.Where(p => p.LocationTypeId == 1 && p.IsTreatmentLocation == true).ToListAsync();
         }
 
         public async Task<IEnumerable<Location>> GetEliteCareLocationAsync()
         {
-            return await _context.Locations.Where(p => p.LocationTypeId == 2).ToListAsync();
+            return await _context.Locations.Where(p => p.LocationTypeId == 2 && p.IsTreatmentLocation == true).ToListAsync();
         }
 
         public async Task<Location> GetPrimeCareLocationByNameAsync(string locationName)

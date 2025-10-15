@@ -143,16 +143,24 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
         [HttpPost]
         public async Task<ActionResult<AppointmentSchedule>> AddAppointmentSchedule(AppointmentScheduleRequestModel appointmentScheduleRequestModel)
         {
-            var createdAppointmentSchedule = await _appointmentScheduleService.AddAppointmentScheduleAsync(appointmentScheduleRequestModel);
-
-            await _appoinmentTreatmentService.DeleteAppointmentTreatmentAsync(createdAppointmentSchedule.Id);
-            foreach (var val in appointmentScheduleRequestModel.appoinmentTreatments)
+            try
             {
-                val.AppoinmentId = createdAppointmentSchedule.Id;
-                await _appoinmentTreatmentService.AddAppointmentTreatmentAsync(val);
+                var createdAppointmentSchedule = await _appointmentScheduleService.AddAppointmentScheduleAsync(appointmentScheduleRequestModel);
+
+                await _appoinmentTreatmentService.DeleteAppointmentTreatmentAsync(createdAppointmentSchedule.Id);
+                foreach (var val in appointmentScheduleRequestModel.appoinmentTreatments)
+                {
+                    val.AppoinmentId = createdAppointmentSchedule.Id;
+                    await _appoinmentTreatmentService.AddAppointmentTreatmentAsync(val);
+                }
+
+                return CreatedAtAction(nameof(GetAppointmentScheduleById), new { id = createdAppointmentSchedule.Id }, createdAppointmentSchedule);
             }
-            
-            return CreatedAtAction(nameof(GetAppointmentScheduleById), new { id = createdAppointmentSchedule.Id }, createdAppointmentSchedule);
+            catch (Exception ex)
+            {
+
+                throw;
+            }
         }
 
         [HttpPut("{id}")]
