@@ -14,6 +14,13 @@ namespace AyuLanka.AMS.Repositories
             _context = context;
         }
 
+        public async Task<Location> GetLocationByLocationIdAsync(int locationId)
+        {
+            return await _context.Locations
+                .Where(p => p.Id == locationId)
+                .FirstOrDefaultAsync() ?? new Location();
+        }
+
         public async Task<IEnumerable<Location>> GetAllLocationAsync()
         {
             return await _context.Locations

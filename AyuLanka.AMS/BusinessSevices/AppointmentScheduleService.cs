@@ -244,13 +244,18 @@ namespace AyuLanka.AMS.BusinessSevices
                     var enterdByUser = await _employeeRepository.GetEmployeeByIdAsync(appointmentResult.EnteredBy);
                     appointmentResult.EnteredByEmployee = enterdByUser;
 
-                    var locationSub = appointmentResult.Location;
-                    var locationTypeName = locationSub.LocationTypeId == 1 ? "Prime Care Wing" : "Elite Care Wing";
+                    var locationSub = appointmentResult.Location != null ? appointmentResult.Location 
+                        : await _locationRepository.GetLocationByLocationIdAsync((int)appointmentResult.LocationId);
 
-                    // 🔹 Insert into other DB if TokenNo newly issued
-                    if (appointmentScheduleRequestModel.IsTokenIssued)
+                    if (locationSub != null)
                     {
-                        await InsertOrUpdateDailyTokenAsync(appointmentResult, locationSub, locationTypeName);
+                        var locationTypeName = locationSub.LocationTypeId == 1 ? "Prime Care Wing" : "Elite Care Wing";
+
+                        // 🔹 Insert into other DB if TokenNo newly issued
+                        if (appointmentScheduleRequestModel.IsTokenIssued)
+                        {
+                            await InsertOrUpdateDailyTokenAsync(appointmentResult, locationSub, locationTypeName);
+                        }
                     }
                 }
 
