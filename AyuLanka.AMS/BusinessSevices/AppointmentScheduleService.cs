@@ -206,27 +206,6 @@ namespace AyuLanka.AMS.BusinessSevices
 
                     appointmentResult = await _appointmentScheduleRepository.AddAppointmentScheduleAsync(newAppointment);
 
-                    var enterdByUser = await _employeeRepository.GetEmployeeByIdAsync(appointmentResult.EnteredBy);
-                    appointmentResult.EnteredByEmployee = enterdByUser;
-                    //appointmentResult.Location = new Location()
-                    //{
-                    //    Id = appointmentResult.Location.Id,
-                    //    Name = appointmentResult.Location.Name,
-                    //    LocationType = new LocationType()
-                    //    {
-                    //        Id = (int)appointmentResult.Location.LocationTypeId,
-                    //        TypeName = appointmentResult.Location?.LocationTypeId == 1 ? "Prime Care Wing" : "Elite Care Wing"
-                    //    }
-                    //};
-
-                    var locationSub = appointmentResult.Location;
-                    var locationTypeName = locationSub.LocationTypeId == 1 ? "Prime Care Wing" : "Elite Care Wing";
-
-                    // 🔹 Insert into other DB if TokenNo is not null
-                    if (appointmentScheduleRequestModel.TokenNo != null)
-                    {
-                        await InsertDailyTokenAsync(appointmentResult, locationSub, locationTypeName);
-                    }
                 }
                 else
                 {
@@ -264,24 +243,14 @@ namespace AyuLanka.AMS.BusinessSevices
 
                     var enterdByUser = await _employeeRepository.GetEmployeeByIdAsync(appointmentResult.EnteredBy);
                     appointmentResult.EnteredByEmployee = enterdByUser;
-                    //appointmentResult.Location = new Location()
-                    //{
-                    //    Id = appointmentResult.Location.Id,
-                    //    Name = appointmentResult.Location.Name,
-                    //    LocationType = new LocationType()
-                    //    {
-                    //        Id = (int)appointmentResult.Location.LocationTypeId,
-                    //        TypeName = appointmentResult.Location?.LocationTypeId == 1 ? "Prime Care Wing" : "Elite Care Wing"
-                    //    }
-                    //};
 
                     var locationSub = appointmentResult.Location;
                     var locationTypeName = locationSub.LocationTypeId == 1 ? "Prime Care Wing" : "Elite Care Wing";
 
                     // 🔹 Insert into other DB if TokenNo newly issued
-                    if (appointmentScheduleRequestModel.TokenNo != null)
+                    if (appointmentScheduleRequestModel.IsTokenIssued)
                     {
-                        await InsertDailyTokenAsync(appointmentResult, locationSub, locationTypeName);
+                        await InsertOrUpdateDailyTokenAsync(appointmentResult, locationSub, locationTypeName);
                     }
                 }
 
@@ -300,7 +269,7 @@ namespace AyuLanka.AMS.BusinessSevices
             await _appointmentScheduleRepository.DeleteAppointmentScheduleAsync(id, deletedByUserId, remark);
         }
 
-        private async Task InsertDailyTokenAsync(AppointmentSchedule appointment, Location location, string locationTypeName)
+        private async Task InsertOrUpdateDailyTokenAsync(AppointmentSchedule appointment, Location location, string locationTypeName)
         {
             try
             {
