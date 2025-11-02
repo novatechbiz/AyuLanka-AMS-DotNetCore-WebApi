@@ -55,6 +55,7 @@ namespace AyuLanka.AMS.DataModels
         public int? LocationId { get; set; }
 
         public int? MainTreatmentArea { get; set; }
+        public bool? IsNeededToFollowUp { get; set; }
 
         // Self-referencing foreign key
         public int? ParentAppointmentScheduleId { get; set; }

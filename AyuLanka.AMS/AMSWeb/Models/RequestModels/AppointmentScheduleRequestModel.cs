@@ -25,6 +25,7 @@ namespace AyuLanka.AMS.AMSWeb.Models.RequestModels
         public string? Remarks { get; set; }
         public int? LocationId { get; set; }
         public int? MainTreatmentArea { get; set; }
+        public bool? IsNeededToFollowUp { get; set; }
         public int? ParentAppointmentScheduleId { get; set; }
 
         public IEnumerable<AppoinmentTreatmentRequestModel> appoinmentTreatments { get; set; }

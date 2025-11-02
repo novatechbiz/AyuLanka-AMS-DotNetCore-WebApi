@@ -210,7 +210,8 @@ namespace AyuLanka.AMS.BusinessSevices
                         TokenNo = appointmentScheduleRequestModel.TokenNo,
                         TokenIssueTime = DateTime.Now,
                         MainTreatmentArea = appointmentScheduleRequestModel?.MainTreatmentArea,
-                        ParentAppointmentScheduleId = appointmentScheduleRequestModel.ParentAppointmentScheduleId != null ? appointmentScheduleRequestModel.ParentAppointmentScheduleId : null
+                        ParentAppointmentScheduleId = appointmentScheduleRequestModel.ParentAppointmentScheduleId != null ? appointmentScheduleRequestModel.ParentAppointmentScheduleId : null,
+                        IsNeededToFollowUp = appointmentScheduleRequestModel.IsNeededToFollowUp != null ? appointmentScheduleRequestModel.IsNeededToFollowUp : false,
                     };
 
                     appointmentResult = await _appointmentScheduleRepository.AddAppointmentScheduleAsync(newAppointment);

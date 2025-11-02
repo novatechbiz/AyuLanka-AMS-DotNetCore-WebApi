@@ -78,6 +78,7 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
                             .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
                         .Include(a => a.Employee) // Include Employee
+                        .Include(a => a.ChildAppointments)
                         .OrderBy(a => a.TokenNo)
                         .Where(a => a.ScheduleDate >= date.Date && a.ScheduleDate < date.Date.AddDays(1))
                         .Where(a => a.TokenNo != null)
