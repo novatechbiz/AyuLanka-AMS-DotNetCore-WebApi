@@ -240,7 +240,7 @@ namespace AyuLanka.AMS.BusinessSevices
                     existingAppointment.UpdatedBy = appointmentScheduleRequestModel.EnteredBy;
                     existingAppointment.UpdatedDate = DateTime.Now;
                     existingAppointment.TokenNo = appointmentScheduleRequestModel.TokenNo != null ? appointmentScheduleRequestModel.TokenNo : existingAppointment.TokenNo;
-                    existingAppointment.MainTreatmentArea = appointmentScheduleRequestModel.MainTreatmentArea;
+                    existingAppointment.MainTreatmentArea = appointmentScheduleRequestModel.MainTreatmentArea != null ? appointmentScheduleRequestModel.MainTreatmentArea : existingAppointment.MainTreatmentArea;
                     existingAppointment.Remarks = appointmentScheduleRequestModel.Remarks;
 
                     if (appointmentScheduleRequestModel.IsTokenIssued)
