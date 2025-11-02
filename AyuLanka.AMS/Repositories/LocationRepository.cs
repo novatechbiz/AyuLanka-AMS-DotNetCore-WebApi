@@ -38,7 +38,7 @@ namespace AyuLanka.AMS.Repositories
             return await _context.Locations.Where(p => p.LocationTypeId == 2 && p.IsTreatmentLocation == true).ToListAsync();
         }
 
-        public async Task<Location> GetPrimeCareLocationByNameAsync(string locationName)
+        public async Task<Location> GetTreatmentLocationByNameAsync(string locationName)
         {
             return await _context.Locations
                 .Where(p => p.Name == locationName)

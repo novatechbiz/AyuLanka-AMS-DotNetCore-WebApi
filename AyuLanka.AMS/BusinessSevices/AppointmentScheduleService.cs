@@ -173,12 +173,20 @@ namespace AyuLanka.AMS.BusinessSevices
                     int location_id;
                     if (appointmentScheduleRequestModel.MainTreatmentArea.HasValue && appointmentScheduleRequestModel.MainTreatmentArea == 1)
                     {
-                        var location = await _locationRepository.GetPrimeCareLocationByNameAsync("Doctor Room Waiting");
+                        var location = await _locationRepository.GetTreatmentLocationByNameAsync("Doctor Room Waiting");
                         location_id = location.Id;
                     }
                     else
                     {
-                        location_id = (int)appointmentScheduleRequestModel.LocationId;
+                        if (appointmentScheduleRequestModel.LocationId.HasValue)
+                        {
+                            location_id = (int)appointmentScheduleRequestModel.LocationId;
+                        } else
+                        {
+                            var location = await _locationRepository.GetTreatmentLocationByNameAsync("Elite Care Waiting");
+                            location_id = location.Id;
+                        }
+                        
                     }
 
                     var newAppointment = new AppointmentSchedule()
@@ -202,6 +210,7 @@ namespace AyuLanka.AMS.BusinessSevices
                         TokenNo = appointmentScheduleRequestModel.TokenNo,
                         TokenIssueTime = DateTime.Now,
                         MainTreatmentArea = appointmentScheduleRequestModel?.MainTreatmentArea,
+                        ParentAppointmentScheduleId = appointmentScheduleRequestModel.ParentAppointmentScheduleId != null ? appointmentScheduleRequestModel.ParentAppointmentScheduleId : null
                     };
 
                     appointmentResult = await _appointmentScheduleRepository.AddAppointmentScheduleAsync(newAppointment);
@@ -229,7 +238,7 @@ namespace AyuLanka.AMS.BusinessSevices
                     existingAppointment.ActualToTimeSecond = appointmentScheduleRequestModel.ActualToTimeSecond;
                     existingAppointment.UpdatedBy = appointmentScheduleRequestModel.EnteredBy;
                     existingAppointment.UpdatedDate = DateTime.Now;
-                    existingAppointment.TokenNo = appointmentScheduleRequestModel.TokenNo;
+                    existingAppointment.TokenNo = appointmentScheduleRequestModel.TokenNo != null ? appointmentScheduleRequestModel.TokenNo : existingAppointment.TokenNo;
                     existingAppointment.MainTreatmentArea = appointmentScheduleRequestModel.MainTreatmentArea;
                     existingAppointment.Remarks = appointmentScheduleRequestModel.Remarks;
 
@@ -246,7 +255,7 @@ namespace AyuLanka.AMS.BusinessSevices
 
                     var locationSub = appointmentResult.Location != null ? appointmentResult.Location 
                         : await _locationRepository.GetLocationByLocationIdAsync((int)appointmentResult.LocationId);
-
+                        
                     if (locationSub != null)
                     {
                         var locationTypeName = locationSub.LocationTypeId == 1 ? "Prime Care Wing" : "Elite Care Wing";

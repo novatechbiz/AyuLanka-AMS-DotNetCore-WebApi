@@ -56,6 +56,14 @@ namespace AyuLanka.AMS.DataModels
 
         public int? MainTreatmentArea { get; set; }
 
+        // Self-referencing foreign key
+        public int? ParentAppointmentScheduleId { get; set; }
+
+        [ForeignKey(nameof(ParentAppointmentScheduleId))]
+        public AppointmentSchedule? ParentAppointmentSchedule { get; set; }
+
+        public ICollection<AppointmentSchedule>? ChildAppointments { get; set; }
+
         [ForeignKey(nameof(EmployeeId))]
         public Employee Employee { get; set; }
 

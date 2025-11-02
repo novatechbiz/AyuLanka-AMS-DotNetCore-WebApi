@@ -8,6 +8,6 @@ namespace AyuLanka.AMS.Repositories.Contracts
         Task<IEnumerable<Location>> GetAllLocationAsync();
         Task<IEnumerable<Location>> GetPrimeCareLocationAsync();
         Task<IEnumerable<Location>> GetEliteCareLocationAsync();
-        Task<Location> GetPrimeCareLocationByNameAsync(string locationName);
+        Task<Location> GetTreatmentLocationByNameAsync(string locationName);
     }
 }
