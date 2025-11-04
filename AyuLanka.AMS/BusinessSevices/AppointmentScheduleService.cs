@@ -226,9 +226,12 @@ namespace AyuLanka.AMS.BusinessSevices
 
                     existingAppointment.CustomerName = appointmentScheduleRequestModel.CustomerName;
                     existingAppointment.ContactNo = appointmentScheduleRequestModel.ContactNo;
-                    existingAppointment.EmployeeId = appointmentScheduleRequestModel.EmployeeId != 0 ? appointmentScheduleRequestModel.EmployeeId : null;
-                    existingAppointment.SecondaryEmployeeId = appointmentScheduleRequestModel.SecondaryEmployeeId != 0 ? appointmentScheduleRequestModel.SecondaryEmployeeId : null;
-                    existingAppointment.DoctorEmployeeId = appointmentScheduleRequestModel.DoctorEmployeeId != 0 ? appointmentScheduleRequestModel.DoctorEmployeeId : null;
+                    existingAppointment.EmployeeId = appointmentScheduleRequestModel.EmployeeId != 0 
+                                                    ? appointmentScheduleRequestModel.EmployeeId : null;
+                    existingAppointment.SecondaryEmployeeId = appointmentScheduleRequestModel.SecondaryEmployeeId != 0 
+                                                    ? appointmentScheduleRequestModel.SecondaryEmployeeId : null;
+                    existingAppointment.DoctorEmployeeId = appointmentScheduleRequestModel.DoctorEmployeeId != 0 
+                                                    ? appointmentScheduleRequestModel.DoctorEmployeeId : null;
                     existingAppointment.ScheduleDate = appointmentScheduleRequestModel.ScheduleDate;
                     existingAppointment.LocationId = appointmentScheduleRequestModel.LocationId;
                     existingAppointment.FromTime = appointmentScheduleRequestModel.FromTime;
@@ -239,9 +242,13 @@ namespace AyuLanka.AMS.BusinessSevices
                     existingAppointment.ActualToTimeSecond = appointmentScheduleRequestModel.ActualToTimeSecond;
                     existingAppointment.UpdatedBy = appointmentScheduleRequestModel.EnteredBy;
                     existingAppointment.UpdatedDate = DateTime.Now;
-                    existingAppointment.TokenNo = appointmentScheduleRequestModel.TokenNo != null ? appointmentScheduleRequestModel.TokenNo : existingAppointment.TokenNo;
-                    existingAppointment.MainTreatmentArea = appointmentScheduleRequestModel.MainTreatmentArea != null ? appointmentScheduleRequestModel.MainTreatmentArea : existingAppointment.MainTreatmentArea;
+                    existingAppointment.TokenNo = appointmentScheduleRequestModel.TokenNo != null 
+                                                    ? appointmentScheduleRequestModel.TokenNo : existingAppointment.TokenNo;
+                    existingAppointment.MainTreatmentArea = appointmentScheduleRequestModel.MainTreatmentArea != null 
+                                                    ? appointmentScheduleRequestModel.MainTreatmentArea : existingAppointment.MainTreatmentArea;
                     existingAppointment.Remarks = appointmentScheduleRequestModel.Remarks;
+                    existingAppointment.IsPatientContacted = appointmentScheduleRequestModel.IsPatientContacted != null 
+                                                    ? appointmentScheduleRequestModel.IsPatientContacted : existingAppointment.IsPatientContacted;
 
                     if (appointmentScheduleRequestModel.IsTokenIssued)
                         existingAppointment.ChitNo = maxChitNo + 1;
