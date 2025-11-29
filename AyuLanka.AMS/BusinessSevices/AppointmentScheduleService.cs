@@ -251,11 +251,19 @@ namespace AyuLanka.AMS.BusinessSevices
                                                     ? appointmentScheduleRequestModel.IsPatientContacted : existingAppointment.IsPatientContacted;
 
                     if (appointmentScheduleRequestModel.IsTokenIssued)
+                    {
                         existingAppointment.ChitNo = maxChitNo + 1;
+                    } else
+                    {
+                        existingAppointment.ChitNo = existingAppointment.ChitNo;
+                    }
+                        
 
                     if (existingAppointment.TokenNo == null && appointmentScheduleRequestModel.TokenNo != null)
+                    {
                         existingAppointment.TokenIssueTime = DateTime.Now;
-
+                    }
+                      
                     appointmentResult = await _appointmentScheduleRepository.UpdateAppointmentScheduleAsync(existingAppointment);
 
                     var enterdByUser = await _employeeRepository.GetEmployeeByIdAsync(appointmentResult.EnteredBy);
