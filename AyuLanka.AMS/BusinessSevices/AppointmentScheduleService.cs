@@ -221,6 +221,34 @@ namespace AyuLanka.AMS.BusinessSevices
                 {
                     var existingAppointment = await _appointmentScheduleRepository.GetAppointmentScheduleByIdAsync(appointmentScheduleRequestModel.Id);
 
+                    int location_id;
+                    if (appointmentScheduleRequestModel.MainTreatmentArea.HasValue && appointmentScheduleRequestModel.MainTreatmentArea == 1)
+                    {
+                        if (appointmentScheduleRequestModel.LocationId.HasValue)
+                        {
+                            location_id = (int)appointmentScheduleRequestModel.LocationId;
+                        }
+                        else
+                        {
+                            var location = await _locationRepository.GetTreatmentLocationByNameAsync("Doctor Room Waiting");
+                            location_id = location.Id;
+                        }
+                            
+                    }
+                    else
+                    {
+                        if (appointmentScheduleRequestModel.LocationId.HasValue)
+                        {
+                            location_id = (int)appointmentScheduleRequestModel.LocationId;
+                        }
+                        else
+                        {
+                            var location = await _locationRepository.GetTreatmentLocationByNameAsync("Elite Care Waiting");
+                            location_id = location.Id;
+                        }
+
+                    }
+
                     // Get max chitNo from repository
                     var maxChitNo = await _appointmentScheduleRepository.GetMaxChitNoAsync(appointmentScheduleRequestModel.ScheduleDate);
 
@@ -233,7 +261,7 @@ namespace AyuLanka.AMS.BusinessSevices
                     existingAppointment.DoctorEmployeeId = appointmentScheduleRequestModel.DoctorEmployeeId != 0 
                                                     ? appointmentScheduleRequestModel.DoctorEmployeeId : null;
                     existingAppointment.ScheduleDate = appointmentScheduleRequestModel.ScheduleDate;
-                    existingAppointment.LocationId = appointmentScheduleRequestModel.LocationId;
+                    existingAppointment.LocationId = location_id;
                     existingAppointment.FromTime = appointmentScheduleRequestModel.FromTime;
                     existingAppointment.ToTime = appointmentScheduleRequestModel.ToTime;
                     existingAppointment.ActualFromTime = appointmentScheduleRequestModel.ActualFromTime;
