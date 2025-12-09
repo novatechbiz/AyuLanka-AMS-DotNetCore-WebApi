@@ -77,6 +77,16 @@ namespace AyuLanka.AMS.BusinessSevices
             return await _appointmentScheduleRepository.GetAppointmentScheduleByDateRangeAsync(startDate, endDate);
         }
 
+        public async Task<IEnumerable<AppointmentSchedule?>> GetAllAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _appointmentScheduleRepository.GetAllAppointmentScheduleByDateRangeAsync(startDate, endDate);
+        }
+
+        public async Task<IEnumerable<object>> SearchPatientsAsync(string keyword)
+        {
+            return await _appointmentScheduleRepository.SearchPatientsAsync(keyword);
+        }
+
         public async Task<IEnumerable<AppointmentSchedule?>> GetPrimeCareAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate)
         {
             return await _appointmentScheduleRepository.GetPrimeCareAppointmentScheduleByDateRangeAsync(startDate, endDate);

@@ -93,6 +93,25 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
             return Ok(result);
         }
 
+        [HttpGet("allbydaterange")]
+        public async Task<ActionResult<IEnumerable<StaffLeave>>> GetAllAppointmentScheduleByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            if (startDate > endDate)
+            {
+                return BadRequest("Start date must be before end date.");
+            }
+
+            var result = await _appointmentScheduleService.GetAllAppointmentScheduleByDateRangeAsync(startDate, endDate);
+            return Ok(result);
+        }
+
+        [HttpGet("patientsearch")]
+        public async Task<ActionResult<IEnumerable<StaffLeave>>> SearchPatients(string keyword)
+        {
+            var result = await _appointmentScheduleService.SearchPatientsAsync(keyword);
+            return Ok(result);
+        }
+
         [HttpGet("primecarebydaterange")]
         public async Task<ActionResult<IEnumerable<StaffLeave>>> GetPrimeCareAppointmentScheduleByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {

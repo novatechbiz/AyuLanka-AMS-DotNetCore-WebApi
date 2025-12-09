@@ -12,6 +12,7 @@ namespace AyuLanka.AMS.Repositories.Contracts
         Task<IEnumerable<AppointmentSchedule?>> GetIssuedTokensByDateAsync();
         Task<IEnumerable<AppointmentSchedule?>> GetDeletedAppoitmentByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<AppointmentSchedule?>> GetAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate);
+        Task<IEnumerable<AppointmentSchedule?>> GetAllAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<AppointmentSchedule?>> GetPrimeCareAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<AppointmentSchedule?>> GetCompletedPreScheduledAppointmentAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<AppointmentSchedule?>> GetAllPreScheduledAppointmentAsync(DateTime startDate, DateTime endDate);
@@ -19,5 +20,6 @@ namespace AyuLanka.AMS.Repositories.Contracts
         Task<AppointmentSchedule> UpdateAppointmentScheduleAsync(AppointmentSchedule appointmentSchedule);
         Task DeleteAppointmentScheduleAsync(int id, int deletedByUserId, string remark);
         Task<int> GetMaxChitNoAsync(DateTime scheduleDate);
+        Task<IEnumerable<object>> SearchPatientsAsync(string keyword);
     }
 }
