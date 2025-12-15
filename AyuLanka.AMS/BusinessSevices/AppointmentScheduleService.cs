@@ -322,7 +322,7 @@ namespace AyuLanka.AMS.BusinessSevices
                             if (timeGap.TotalMinutes >= 30)
                             {
                                 appointmentResult.CustomerName =
-                                    $"{appointmentResult.CustomerName} - {appointmentResult.TokenIssueTime::yyyy-MM-dd HH:mm:ss}";
+                                    $"{appointmentResult.CustomerName} - Appt: {appointmentResult.FromTime:HH:mm:ss}";
                             }
 
                             await InsertOrUpdateDailyTokenAsync(appointmentResult, locationSub, locationTypeName);
