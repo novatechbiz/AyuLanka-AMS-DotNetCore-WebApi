@@ -313,7 +313,7 @@ namespace AyuLanka.AMS.BusinessSevices
                     if (locationSub != null)
                     {
                         var locationTypeName = locationSub.LocationTypeId == 1 ? "Prime Care Wing" : "Elite Care Wing";
-
+                        var customerName = appointmentResult.CustomerName;
                         // 🔹 Insert into other DB if TokenNo newly issued
                         if (appointmentScheduleRequestModel.IsTokenIssued)
                         {
@@ -321,11 +321,10 @@ namespace AyuLanka.AMS.BusinessSevices
 
                             if (timeGap.TotalMinutes >= 30)
                             {
-                                appointmentResult.CustomerName =
-                                    $"{appointmentResult.CustomerName} - Appt: {appointmentResult.FromTime:HH:mm:ss}";
+                                customerName = $"{appointmentResult.CustomerName} - Appt: {appointmentResult.FromTime:hh\\:mm\\:ss}";
                             }
 
-                            await InsertOrUpdateDailyTokenAsync(appointmentResult, locationSub, locationTypeName);
+                            await InsertOrUpdateDailyTokenAsync(appointmentResult, locationSub, locationTypeName, customerName);
                         }
                     }
                 }
@@ -345,7 +344,7 @@ namespace AyuLanka.AMS.BusinessSevices
             await _appointmentScheduleRepository.DeleteAppointmentScheduleAsync(id, deletedByUserId, remark);
         }
 
-        private async Task InsertOrUpdateDailyTokenAsync(AppointmentSchedule appointment, Location location, string locationTypeName)
+        private async Task InsertOrUpdateDailyTokenAsync(AppointmentSchedule appointment, Location location, string locationTypeName, string customerName)
         {
             try
             {
@@ -362,7 +361,7 @@ namespace AyuLanka.AMS.BusinessSevices
                         command.Parameters.AddWithValue("@TokenNo", appointment.TokenNo ?? (object)DBNull.Value);
                         command.Parameters.AddWithValue("@TreatmentLocationName", locationTypeName ?? (object)DBNull.Value);
                         command.Parameters.AddWithValue("@SubLocationName", location.Name ?? (object)DBNull.Value);
-                        command.Parameters.AddWithValue("@PatientName", appointment.CustomerName ?? (object)DBNull.Value);
+                        command.Parameters.AddWithValue("@PatientName", customerName ?? (object)DBNull.Value);
                         command.Parameters.AddWithValue("@PhoneNo", appointment.ContactNo ?? (object)DBNull.Value);
                         command.Parameters.AddWithValue("@EnteredBy", appointment.EnteredByEmployee.Username ?? (object)DBNull.Value);
 
