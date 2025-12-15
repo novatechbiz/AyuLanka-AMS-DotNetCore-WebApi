@@ -82,7 +82,7 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
         }
 
         [HttpGet("bydaterange")]
-        public async Task<ActionResult<IEnumerable<StaffLeave>>> GetStaffLeavesByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        public async Task<ActionResult<IEnumerable<AppointmentSchedule>>> GetAppointmentScheduleByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
             if (startDate > endDate)
             {
@@ -94,7 +94,7 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
         }
 
         [HttpGet("allbydaterange")]
-        public async Task<ActionResult<IEnumerable<StaffLeave>>> GetAllAppointmentScheduleByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        public async Task<ActionResult<IEnumerable<AppointmentSchedule>>> GetAllAppointmentScheduleByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
             if (startDate > endDate)
             {
@@ -106,14 +106,14 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
         }
 
         [HttpGet("patientsearch")]
-        public async Task<ActionResult<IEnumerable<StaffLeave>>> SearchPatients(string keyword)
+        public async Task<ActionResult<IEnumerable<AppointmentSchedule>>> SearchPatients(string keyword)
         {
             var result = await _appointmentScheduleService.SearchPatientsAsync(keyword);
             return Ok(result);
         }
 
         [HttpGet("primecarebydaterange")]
-        public async Task<ActionResult<IEnumerable<StaffLeave>>> GetPrimeCareAppointmentScheduleByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        public async Task<ActionResult<IEnumerable<AppointmentSchedule>>> GetPrimeCareAppointmentScheduleByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
             if (startDate > endDate)
             {
@@ -125,7 +125,7 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
         }
 
         [HttpGet("getAllPreScheduledScheduledAppointments")]
-        public async Task<ActionResult<IEnumerable<StaffLeave>>> GetAllPreScheduledAppointment([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        public async Task<ActionResult<IEnumerable<AppointmentSchedule>>> GetAllPreScheduledAppointment([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
             if (startDate > endDate)
             {
@@ -137,7 +137,7 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
         }
 
         [HttpGet("getCompletedPreScheduledScheduledAppointments")]
-        public async Task<ActionResult<IEnumerable<StaffLeave>>> GetCompletedPreScheduledAppointment([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        public async Task<ActionResult<IEnumerable<AppointmentSchedule>>> GetCompletedPreScheduledAppointment([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
             if (startDate > endDate)
             {

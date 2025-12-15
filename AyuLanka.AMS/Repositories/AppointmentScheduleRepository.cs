@@ -137,6 +137,7 @@ namespace AyuLanka.AMS.Repositories
             return await _context.AppointmentSchedules
                         .Include(a => a.Location)
                         .Include(a => a.EnteredByEmployee)
+                        .Include(a => a.ChildAppointments)
                         .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
                             .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
                         .Include(a => a.Employee) // Include Employee
