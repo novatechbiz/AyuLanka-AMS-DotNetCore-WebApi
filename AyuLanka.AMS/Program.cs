@@ -63,6 +63,11 @@ builder.Services.AddScoped<IShiftChangeDetailRepository, ShiftChangeDetailReposi
 builder.Services.AddScoped<IAppoinmentTreatmentService, AppoinmentTreatmentService>();
 builder.Services.AddScoped<IAppoinmentTreatmentRepository, AppoinmentTreatmentRepository>();
 
+builder.Services.AddHttpClient("CustomerApi", client =>
+{
+    client.BaseAddress = new Uri("http://api.ayulankamedical.com/");
+});
+
 // Add CORS policy
 builder.Services.AddCors(options =>
 {

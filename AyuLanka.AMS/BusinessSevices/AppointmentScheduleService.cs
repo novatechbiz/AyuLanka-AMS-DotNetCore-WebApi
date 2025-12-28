@@ -1,10 +1,12 @@
 ﻿using AyuLanka.AMS.AMSWeb.Models.RequestModels;
+using AyuLanka.AMS.AMSWeb.Models.ResponseModels;
 using AyuLanka.AMS.BusinessSevices.Contracts;
 using AyuLanka.AMS.DataModels;
 using AyuLanka.AMS.Repositories.Contracts;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using System.Text.Json;
 using System.Transactions;
 
 namespace AyuLanka.AMS.BusinessSevices
@@ -15,16 +17,19 @@ namespace AyuLanka.AMS.BusinessSevices
         private readonly ILocationRepository _locationRepository;
         private readonly IConfiguration _configuration;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IHttpClientFactory _httpClientFactory;
 
         public AppointmentScheduleService(IAppointmentScheduleRepository appointmentScheduleRepository, 
             ILocationRepository locationRepository,
             IEmployeeRepository employeeRepository,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            IHttpClientFactory httpClientFactory)
         {
             _appointmentScheduleRepository = appointmentScheduleRepository;
             _locationRepository = locationRepository;
             _employeeRepository = employeeRepository;
             _configuration = configuration;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<IEnumerable<AppointmentSchedule>> GetAllAppointmentSchedulesAsync()
@@ -84,7 +89,35 @@ namespace AyuLanka.AMS.BusinessSevices
 
         public async Task<IEnumerable<object>> SearchPatientsAsync(string keyword)
         {
-            return await _appointmentScheduleRepository.SearchPatientsAsync(keyword);
+            if (string.IsNullOrWhiteSpace(keyword))
+                return Enumerable.Empty<object>();
+
+            var client = _httpClientFactory.CreateClient("CustomerApi");
+
+            var response = await client.GetAsync(
+                $"api/customer/search-customers?searchTerm={Uri.EscapeDataString(keyword)}"
+            );
+
+            if (!response.IsSuccessStatusCode)
+                return Enumerable.Empty<object>();
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            var apiResponse = JsonSerializer.Deserialize<CustomerSearchApiResponse>(
+                json,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+            return apiResponse?.Data?.Result
+                ?.Select(c => new
+                {
+                    Id = c.CustomerId,
+                    CustomerName = c.CustomerName,
+                    ContactNo = c.Phone
+                })
+                ?? Enumerable.Empty<object>();
         }
 
         public async Task<IEnumerable<AppointmentSchedule?>> GetPrimeCareAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate)

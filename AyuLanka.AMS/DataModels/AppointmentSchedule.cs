@@ -19,6 +19,8 @@ namespace AyuLanka.AMS.DataModels
         [MaxLength(100)]
         public string CustomerName { get; set; }
 
+        public int? CustomerId { get; set; }
+
         [Required]
         [MaxLength(15)]
         public string ContactNo { get; set; }

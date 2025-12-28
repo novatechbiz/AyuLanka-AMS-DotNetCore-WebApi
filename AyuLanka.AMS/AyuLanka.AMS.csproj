@@ -33,7 +33,6 @@
   <ItemGroup>
     <Folder Include="AMSWeb\DTOs\" />
     <Folder Include="AMSWeb\Middlewares\" />
-    <Folder Include="AMSWeb\Models\ResponseModels\" />
     <Folder Include="Shared\" />
   </ItemGroup>
 
