@@ -21,5 +21,6 @@ namespace AyuLanka.AMS.BusinessSevices.Contracts
         Task<AppointmentSchedule> UpdateAppointmentScheduleAsync(AppointmentSchedule appointmentScheduleRequestModel);
         Task DeleteAppointmentScheduleAsync(int id, int deletedByUserId, string remark);
         Task<IEnumerable<object>> SearchPatientsAsync(string keyword);
+        Task<object> CreateCustomerAsync(CreateCustomerRequest request);
     }
 }

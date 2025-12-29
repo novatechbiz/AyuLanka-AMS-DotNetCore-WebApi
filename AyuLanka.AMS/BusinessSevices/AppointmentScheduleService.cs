@@ -6,8 +6,10 @@ using AyuLanka.AMS.Repositories.Contracts;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using System.Text;
 using System.Text.Json;
 using System.Transactions;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace AyuLanka.AMS.BusinessSevices
 {
@@ -119,6 +121,38 @@ namespace AyuLanka.AMS.BusinessSevices
                 })
                 ?? Enumerable.Empty<object>();
         }
+
+        public async Task<object> CreateCustomerAsync(CreateCustomerRequest request)
+        {
+            var client = _httpClientFactory.CreateClient("CustomerApi");
+
+            var payload = new
+            {
+                customerName = request.CustomerName,
+                phone = request.Phone,
+                CustomerType = "patient"
+            };
+
+            var json = JsonSerializer.Serialize(payload);
+
+            var content = new StringContent(
+                json,
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            var response = await client.PostAsync(
+                "api/customer",
+                content
+            );
+
+            response.EnsureSuccessStatusCode();
+
+            var responseJson = await response.Content.ReadAsStringAsync();
+
+            return JsonSerializer.Deserialize<object>(responseJson);
+        }
+
 
         public async Task<IEnumerable<AppointmentSchedule?>> GetPrimeCareAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate)
         {

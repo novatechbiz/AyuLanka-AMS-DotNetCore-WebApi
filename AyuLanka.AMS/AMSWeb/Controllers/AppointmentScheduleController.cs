@@ -112,6 +112,13 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
             return Ok(result);
         }
 
+        [HttpPost("create-customer")]
+        public async Task<IActionResult> CreateCustomer(CreateCustomerRequest request)
+        {
+            var result = await _appointmentScheduleService.CreateCustomerAsync(request);
+            return Ok(result);
+        }
+
         [HttpGet("primecarebydaterange")]
         public async Task<ActionResult<IEnumerable<AppointmentSchedule>>> GetPrimeCareAppointmentScheduleByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
