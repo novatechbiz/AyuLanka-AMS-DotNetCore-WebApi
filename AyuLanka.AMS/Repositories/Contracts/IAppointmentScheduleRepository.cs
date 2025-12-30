@@ -21,5 +21,6 @@ namespace AyuLanka.AMS.Repositories.Contracts
         Task DeleteAppointmentScheduleAsync(int id, int deletedByUserId, string remark);
         Task<int> GetMaxChitNoAsync(DateTime scheduleDate);
         Task<IEnumerable<object>> SearchPatientsAsync(string keyword);
+        Task<bool> IsTokenExistsAsync(int tokenNo, DateTime scheduleDate, int? excludeAppointmentId = null);
     }
 }

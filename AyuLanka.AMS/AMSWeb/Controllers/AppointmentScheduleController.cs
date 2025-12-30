@@ -182,10 +182,13 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
 
                 return CreatedAtAction(nameof(GetAppointmentScheduleById), new { id = createdAppointmentSchedule.Id }, createdAppointmentSchedule);
             }
-            catch (Exception ex)
+            catch (InvalidOperationException ex)
             {
-
-                throw;
+                return BadRequest(new
+                {
+                    message = ex.Message,
+                    field = "tokenNo"
+                });
             }
         }
 

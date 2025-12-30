@@ -4,6 +4,7 @@ using AyuLanka.AMS.BusinessSevices.Contracts;
 using AyuLanka.AMS.DataModels;
 using AyuLanka.AMS.Repositories.Contracts;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Text;
@@ -245,6 +246,22 @@ namespace AyuLanka.AMS.BusinessSevices
             {
                 AppointmentSchedule appointmentResult = null;
 
+                if (appointmentScheduleRequestModel.TokenNo.HasValue)
+                {
+                    var tokenExists = await _appointmentScheduleRepository.IsTokenExistsAsync(
+                        appointmentScheduleRequestModel.TokenNo.Value,
+                        appointmentScheduleRequestModel.ScheduleDate,
+                        appointmentScheduleRequestModel.Id == 0 ? null : appointmentScheduleRequestModel.Id
+                    );
+
+                    if (tokenExists)
+                    {
+                        throw new InvalidOperationException(
+                            $"Token number {appointmentScheduleRequestModel.TokenNo} already exists for the selected date."
+                        );
+                    }
+                }
+
                 if (appointmentScheduleRequestModel.Id == 0)
                 {
                     int location_id;
@@ -268,6 +285,7 @@ namespace AyuLanka.AMS.BusinessSevices
 
                     var newAppointment = new AppointmentSchedule()
                     {
+                        CustomerId = appointmentScheduleRequestModel.CustomerId,
                         CustomerName = appointmentScheduleRequestModel.CustomerName,
                         ContactNo = appointmentScheduleRequestModel.ContactNo,
                         EmployeeId = appointmentScheduleRequestModel.EmployeeId != 0 ? appointmentScheduleRequestModel.EmployeeId : null,
@@ -329,6 +347,7 @@ namespace AyuLanka.AMS.BusinessSevices
                     // Get max chitNo from repository
                     var maxChitNo = await _appointmentScheduleRepository.GetMaxChitNoAsync(appointmentScheduleRequestModel.ScheduleDate);
 
+                    existingAppointment.CustomerId = appointmentScheduleRequestModel.CustomerId;
                     existingAppointment.CustomerName = appointmentScheduleRequestModel.CustomerName;
                     existingAppointment.ContactNo = appointmentScheduleRequestModel.ContactNo;
                     existingAppointment.EmployeeId = appointmentScheduleRequestModel.EmployeeId != 0 
@@ -410,6 +429,12 @@ namespace AyuLanka.AMS.BusinessSevices
         {
             await _appointmentScheduleRepository.DeleteAppointmentScheduleAsync(id, deletedByUserId, remark);
         }
+
+        public async Task<bool> IsTokenExistsAsync(int tokenNo, DateTime scheduleDate, int? excludeAppointmentId = null)
+        {
+            return await _appointmentScheduleRepository.IsTokenExistsAsync(tokenNo, scheduleDate, excludeAppointmentId);
+        }
+
 
         private async Task InsertOrUpdateDailyTokenAsync(AppointmentSchedule appointment, Location location, string locationTypeName, string customerName)
         {

@@ -10,6 +10,7 @@ namespace AyuLanka.AMS.AMSWeb.Models.RequestModels
         public int? SecondaryEmployeeId { get; set; }
         public int? DoctorEmployeeId { get; set; }
         public string CustomerName { get; set; }
+        public int CustomerId { get; set; }
         public string ContactNo { get; set; }
         public TimeSpan FromTime { get; set; }
         public TimeSpan ToTime { get; set; }
