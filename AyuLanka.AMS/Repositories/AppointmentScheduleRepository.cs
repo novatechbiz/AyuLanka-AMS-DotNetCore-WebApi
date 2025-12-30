@@ -248,5 +248,13 @@ namespace AyuLanka.AMS.Repositories
             return maxChitNo;
         }
 
+        public async Task<bool> IsTokenExistsAsync(int tokenNo, DateTime scheduleDate, int? excludeAppointmentId = null)
+        {
+            return await _context.AppointmentSchedules.AnyAsync(a =>
+                    a.TokenNo == tokenNo &&
+                    a.ScheduleDate.Date == scheduleDate.Date &&
+                    (excludeAppointmentId == null || a.Id != excludeAppointmentId)
+                );
+        }
     }
 }
