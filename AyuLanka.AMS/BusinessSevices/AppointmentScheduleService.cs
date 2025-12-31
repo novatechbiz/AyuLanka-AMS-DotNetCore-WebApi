@@ -347,7 +347,8 @@ namespace AyuLanka.AMS.BusinessSevices
                     // Get max chitNo from repository
                     var maxChitNo = await _appointmentScheduleRepository.GetMaxChitNoAsync(appointmentScheduleRequestModel.ScheduleDate);
 
-                    existingAppointment.CustomerId = appointmentScheduleRequestModel.CustomerId;
+                    existingAppointment.CustomerId = appointmentScheduleRequestModel.CustomerId != 0 ? 
+                                                    appointmentScheduleRequestModel.CustomerId : existingAppointment.CustomerId;
                     existingAppointment.CustomerName = appointmentScheduleRequestModel.CustomerName;
                     existingAppointment.ContactNo = appointmentScheduleRequestModel.ContactNo;
                     existingAppointment.EmployeeId = appointmentScheduleRequestModel.EmployeeId != 0 
