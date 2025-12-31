@@ -252,7 +252,7 @@ namespace AyuLanka.AMS.Repositories
         {
             return await _context.AppointmentSchedules.AnyAsync(a =>
                     a.TokenNo == tokenNo &&
-                    a.IsDeleted == false
+                    a.IsDeleted == false &&
                     a.ScheduleDate.Date == scheduleDate.Date &&
                     (excludeAppointmentId == null || a.Id != excludeAppointmentId)
                 );
