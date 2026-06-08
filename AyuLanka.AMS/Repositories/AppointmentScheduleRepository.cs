@@ -1,4 +1,5 @@
-﻿using AyuLanka.AMS.Data;
+﻿using AyuLanka.AMS.AMSWeb.Models.ResponseModels;
+using AyuLanka.AMS.Data;
 using AyuLanka.AMS.DataModels;
 using AyuLanka.AMS.Repositories.Contracts;
 using Microsoft.AspNetCore.Mvc;
@@ -138,9 +139,9 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.Location)
                         .Include(a => a.EnteredByEmployee)
                         .Include(a => a.ChildAppointments)
-                        .Include(a => a.AppointmentTreatments) // Include related AppointmentTreatments
-                            .ThenInclude(at => at.TreatmentType) // Include TreatmentLocation within AppointmentTreatments
-                        .Include(a => a.Employee) // Include Employee
+                        .Include(a => a.AppointmentTreatments)
+                            .ThenInclude(at => at.TreatmentType)
+                        .Include(a => a.Employee)
             .OrderBy(a => a.TokenNo)
             .Where(a => a.ScheduleDate >= startDate.Date && a.ScheduleDate < endDate.Date.AddDays(1))
             .Where(a => a.IsDeleted != true)
@@ -148,17 +149,271 @@ namespace AyuLanka.AMS.Repositories
                         .ToListAsync();
         }
 
-        public async Task<IEnumerable<object>> SearchPatientsAsync(string keyword)
+        public async Task<IEnumerable<DashboardDateChartDto>>GetAllDashboardChartsDatabyDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            var appointments = await _context.AppointmentSchedules
+                .Include(a => a.AppointmentTreatments)
+                    .ThenInclude(at => at.TreatmentType)
+                .Where(a =>
+                    a.ScheduleDate.Date >= startDate &&
+                    a.ScheduleDate.Date <= endDate &&
+                    a.CustomerId != null 
+                    //&& a.ChitNo != null
+                    //&& a.IsDeleted != true
+                    )
+                .ToListAsync();
+
+            // First visit per customer
+            var firstVisit = appointments
+                .GroupBy(a => a.CustomerId)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Min(x => x.ScheduleDate.Date)
+                );
+
+            // First OPD date per customer
+            var firstOpd = appointments
+                .Where(a => a.AppointmentTreatments.All(t =>
+                    t.TreatmentType.TreatmentShortCode.StartsWith("P")))
+                .GroupBy(a => a.CustomerId)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Min(x => x.ScheduleDate.Date)
+                );
+
+            // First Wellness date per customer
+            var firstWellness = appointments
+                .Where(a => a.AppointmentTreatments.Any(t =>
+                    t.TreatmentType.TreatmentShortCode.StartsWith("E")))
+                .GroupBy(a => a.CustomerId)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Min(x => x.ScheduleDate.Date)
+                );
+
+            var result = appointments
+                .GroupBy(a => a.ScheduleDate.Date)
+                .Select(g =>
+                {
+                    var opd = g.Where(a =>
+                        a.AppointmentTreatments.All(t => t.TreatmentType.TreatmentShortCode.StartsWith("P")));
+
+                    var wellness = g.Where(a =>
+                        a.AppointmentTreatments.All(t => t.TreatmentType.TreatmentShortCode.StartsWith("E")));
+
+                    var opdWellness = g.Where(a =>
+                        a.AppointmentTreatments.Any(t => t.TreatmentType.TreatmentShortCode.StartsWith("P")) &&
+                        a.AppointmentTreatments.Any(t => t.TreatmentType.TreatmentShortCode.StartsWith("E")));
+
+
+                    // OPD → Wellness conversions on THIS DATE
+                    var convertedCount = firstWellness
+                        .Where(x =>
+                            x.Value == g.Key &&              // conversion date
+                            firstOpd.ContainsKey(x.Key) &&
+                            firstOpd[x.Key] < x.Value)       // OPD before wellness
+                        .Select(x => x.Key)
+                        .Distinct()
+                        .Count();
+
+                    return new DashboardDateChartDto
+                    {
+                        Date = g.Key,
+                        OpdNew = opd.Count(a => firstVisit[a.CustomerId] == g.Key),
+                        OpdRepeat = opd.Count(a => firstVisit[a.CustomerId] < g.Key),
+
+                        WellnessNew = wellness.Count(a => firstVisit[a.CustomerId] == g.Key),
+                        WellnessRepeat = wellness.Count(a => firstVisit[a.CustomerId] < g.Key),
+
+                        OpdWellnessNew = opdWellness.Count(a => firstVisit[a.CustomerId] == g.Key),
+                        OpdWellnessRepeat = opdWellness.Count(a => firstVisit[a.CustomerId] < g.Key),
+
+                        OpdToWellnessConverted = convertedCount
+                    };
+
+                })
+                .OrderBy(x => x.Date)
+                .ToList();
+
+            return result;
+        }
+
+        public async Task<IEnumerable<DashboardSummaryDto>> GetDashboardSummaryByDateRangeAsync(DateTime startDate, DateTime endDate, string category)
+        {
+            var appointments = await _context.AppointmentSchedules
+                .Include(a => a.AppointmentTreatments)
+                    .ThenInclude(at => at.TreatmentType)
+                .Where(a => a.ScheduleDate.Date >= startDate &&
+                            a.ScheduleDate.Date <= endDate &&
+                            a.CustomerId != null
+                            //&& a.ChitNo != null
+                            //&& a.IsDeleted != true
+                            )
+                .ToListAsync();
+
+            var firstVisit = appointments
+                .GroupBy(a => a.CustomerId)
+                .ToDictionary(g => g.Key, g => g.Min(x => x.ScheduleDate.Date));
+
+            var summary = appointments
+                .GroupBy(a => a.ScheduleDate.Date)
+                .Select(g =>
+                {
+                    IEnumerable<AppointmentSchedule> filtered = g;
+
+                    if (category == "OPD")
+                    {
+                        filtered = g.Where(a => a.AppointmentTreatments.All(
+                            t => t.TreatmentType.TreatmentShortCode.StartsWith("P")));
+                    }
+                    else if (category == "Wellness")
+                    {
+                        filtered = g.Where(a => a.AppointmentTreatments.All(
+                            t => t.TreatmentType.TreatmentShortCode.StartsWith("E")));
+                    }
+                    else if (category == "OPD + Wellness")
+                    {
+                        filtered = g.Where(a =>
+                            a.AppointmentTreatments.Any(t => t.TreatmentType.TreatmentShortCode.StartsWith("P")) &&
+                            a.AppointmentTreatments.Any(t => t.TreatmentType.TreatmentShortCode.StartsWith("E")));
+                    }
+                    else if (category == "OPD → Wellness")
+                    {
+                        var firstOpd = appointments
+                            .Where(a => a.AppointmentTreatments.All(t =>
+                                t.TreatmentType.TreatmentShortCode.StartsWith("P")))
+                            .GroupBy(a => a.CustomerId)
+                            .ToDictionary(g => g.Key, g => g.Min(x => x.ScheduleDate.Date));
+
+                        var firstWellness = appointments
+                            .Where(a => a.AppointmentTreatments.Any(t =>
+                                t.TreatmentType.TreatmentShortCode.StartsWith("E")))
+                            .GroupBy(a => a.CustomerId)
+                            .ToDictionary(g => g.Key, g => g.Min(x => x.ScheduleDate.Date));
+
+                        var convertedCount = firstWellness
+                            .Where(x => firstOpd.ContainsKey(x.Key) &&
+                                        firstOpd[x.Key] < x.Value &&
+                                        x.Value == g.Key)
+                            .Count();
+
+                        return new List<DashboardSummaryDto>
+                        {
+                            new() { Date = g.Key, Type = "Converted", Count = convertedCount }
+                        };
+                    }
+
+                    return new List<DashboardSummaryDto>
+                    {
+                        new() { Date = g.Key, Type = "New", Count = filtered.Count(a => firstVisit[a.CustomerId] == g.Key) },
+                        new() { Date = g.Key, Type = "Repeat", Count = filtered.Count(a => firstVisit[a.CustomerId] < g.Key) }
+                    };
+                })
+                .SelectMany(x => x)
+                .OrderBy(x => x.Date)
+                .ToList();
+
+            return summary;
+        }
+
+
+        public async Task<IEnumerable<DashboardDetailsDto>> GetDashboardDetailsByDateAsync(DateTime date, string category, string type)
+        {
+            var appointments = await _context.AppointmentSchedules
+                .Include(a => a.AppointmentTreatments)
+                    .ThenInclude(at => at.TreatmentType)
+                .Include(a => a.Employee)
+                .Where(a => a.ScheduleDate.Date == date.Date && a.CustomerId != null
+                //&& a.ChitNo != null
+                //&& a.IsDeleted != true
+                )
+                .ToListAsync();
+
+            // First visit per customer
+            var firstVisit = appointments
+                .GroupBy(a => a.CustomerId)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Min(x => x.ScheduleDate.Date)
+                );
+
+            // First OPD date per customer
+            var firstOpd = appointments
+                .Where(a => a.AppointmentTreatments.All(t =>
+                    t.TreatmentType.TreatmentShortCode.StartsWith("P")))
+                .GroupBy(a => a.CustomerId)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Min(x => x.ScheduleDate.Date)
+                );
+
+            // First Wellness date per customer
+            var firstWellness = appointments
+                .Where(a => a.AppointmentTreatments.Any(t =>
+                    t.TreatmentType.TreatmentShortCode.StartsWith("E")))
+                .GroupBy(a => a.CustomerId)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Min(x => x.ScheduleDate.Date)
+                );
+
+            var filtered = appointments.Where(a =>
+            {
+                switch (category.ToUpper())
+                {
+                    case "OPD":
+                        if (!a.AppointmentTreatments.All(t => t.TreatmentType.TreatmentShortCode.StartsWith("P"))) return false;
+                        break;
+                    case "WELLNESS":
+                        if (!a.AppointmentTreatments.All(t => t.TreatmentType.TreatmentShortCode.StartsWith("E"))) return false;
+                        break;
+                    case "COMBINED":
+                        if (!(a.AppointmentTreatments.Any(t => t.TreatmentType.TreatmentShortCode.StartsWith("P")) &&
+                              a.AppointmentTreatments.Any(t => t.TreatmentType.TreatmentShortCode.StartsWith("E"))))
+                            return false;
+                        break;
+                    case "CONVERSION":
+                        return firstOpd.ContainsKey(a.CustomerId) &&
+                               firstWellness.ContainsKey(a.CustomerId) &&
+                               firstWellness[a.CustomerId] == date &&
+                               firstOpd[a.CustomerId] < firstWellness[a.CustomerId];
+                    default:
+                        return false;
+                }
+
+                // Filter by type
+                if (type == "New")
+                    return firstVisit[a.CustomerId] == date;
+                if (type == "Repeat")
+                    return firstVisit[a.CustomerId] < date;
+                if (type == "Converted")
+                    return category.ToUpper() == "CONVERSION"; // already filtered above
+
+                return false;
+            });
+
+            return filtered.Select(a => new DashboardDetailsDto
+            {
+                CustomerName = a.CustomerName,
+                ContactNo = a.ContactNo,
+                Treatments = a.AppointmentTreatments.Select(t => t.TreatmentType.Name).ToList(),
+                EmployeeName = a.Employee != null ? a.Employee.Username : "",
+            }).ToList();
+        }
+
+
+        public async Task<IEnumerable<AppointmentSchedule>> GetCustomerDetailsByIdAsync(int customerId)
         {
             var results = await _context.AppointmentSchedules
-                .Where(p => p.CustomerName.Contains(keyword) || p.ContactNo.Contains(keyword))
-                .GroupBy(p => new { p.CustomerName, p.ContactNo })
-                .Select(g => new
-                {
-                    CustomerName = g.Key.CustomerName,
-                    ContactNo = g.Key.ContactNo
-                })
-                .Take(10)
+                .Include(a => a.Location)
+                .Include(a => a.EnteredByEmployee)
+                .Include(a => a.ChildAppointments)
+                .Include(a => a.AppointmentTreatments)
+                    .ThenInclude(at => at.TreatmentType)
+                .Include(a => a.Employee)
+                .OrderBy(a => a.ScheduleDate)
+                .Where(a => a.IsDeleted != true)
+                .Where(p => p.CustomerId == customerId)
                 .ToListAsync();
 
             return results;
@@ -175,6 +430,7 @@ namespace AyuLanka.AMS.Repositories
                         .Include(a => a.Employee) // Include Employee
             .OrderBy(a => a.TokenNo)
             .Where(a => a.ScheduleDate >= startDate.Date && a.ScheduleDate < endDate.Date.AddDays(1))
+            .Where(a => a.ChitNo != null)
             .Where(a => a.IsDeleted != true)
             .Where(a => a.Location != null && a.Location.LocationTypeId == 1)
                         .ToListAsync();
