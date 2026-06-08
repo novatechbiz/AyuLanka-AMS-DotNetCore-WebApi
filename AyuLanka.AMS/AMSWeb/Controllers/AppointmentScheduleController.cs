@@ -1,4 +1,5 @@
 ﻿using AyuLanka.AMS.AMSWeb.Models.RequestModels;
+using AyuLanka.AMS.AMSWeb.Models.ResponseModels;
 using AyuLanka.AMS.BusinessSevices;
 using AyuLanka.AMS.BusinessSevices.Contracts;
 using AyuLanka.AMS.DataModels;
@@ -105,10 +106,51 @@ namespace AyuLanka.AMS.AMSWeb.Controllers
             return Ok(result);
         }
 
+        [HttpGet("dashboardchartsdatabydaterange")]
+        public async Task<ActionResult<IEnumerable<DashboardDateChartDto>>> GetAllDashboardChartsDatabyDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            if (startDate > endDate)
+            {
+                return BadRequest("Start date must be before end date.");
+            }
+
+            var result = await _appointmentScheduleService.GetAllDashboardChartsDatabyDateRangeAsync(startDate, endDate);
+            return Ok(result);
+        }
+
+        [HttpGet("dashboardSummaryByDateRange")]
+        public async Task<ActionResult<IEnumerable<DashboardSummaryDto>>> GetDashboardSummaryByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate, [FromQuery] string category)
+        {
+            if (startDate > endDate)
+                return BadRequest("Start date must be before end date.");
+
+            var result = await _appointmentScheduleService.GetDashboardSummaryByDateRangeAsync(startDate, endDate, category);
+            return Ok(result);
+        }
+
+
+        [HttpGet("dashboarddetailsbydate")]
+        public async Task<ActionResult<IEnumerable<DashboardDetailsDto>>> GetDashboardDetailsByDate([FromQuery] DateTime date, [FromQuery] string category, [FromQuery] string type)
+        {
+            if (date == DateTime.MinValue)
+                return BadRequest("Invalid date");
+
+            var result = await _appointmentScheduleService.GetDashboardDetailsByDateAsync(date, category, type);
+            return Ok(result);
+        }
+
+
         [HttpGet("patientsearch")]
         public async Task<ActionResult<IEnumerable<AppointmentSchedule>>> SearchPatients(string keyword)
         {
             var result = await _appointmentScheduleService.SearchPatientsAsync(keyword);
+            return Ok(result);
+        }
+
+        [HttpGet("customerprofile")]
+        public async Task<ActionResult<IEnumerable<AppointmentSchedule>>> GetCustomerDetailsById(int customerId)
+        {
+            var result = await _appointmentScheduleService.GetCustomerDetailsByIdAsync(customerId);
             return Ok(result);
         }
 

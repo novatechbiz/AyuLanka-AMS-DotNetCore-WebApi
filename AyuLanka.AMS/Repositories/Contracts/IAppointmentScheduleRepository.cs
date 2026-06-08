@@ -1,4 +1,5 @@
-﻿using AyuLanka.AMS.DataModels;
+﻿using AyuLanka.AMS.AMSWeb.Models.ResponseModels;
+using AyuLanka.AMS.DataModels;
 
 namespace AyuLanka.AMS.Repositories.Contracts
 {
@@ -13,6 +14,9 @@ namespace AyuLanka.AMS.Repositories.Contracts
         Task<IEnumerable<AppointmentSchedule?>> GetDeletedAppoitmentByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<AppointmentSchedule?>> GetAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<AppointmentSchedule?>> GetAllAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate);
+        Task<IEnumerable<DashboardDateChartDto?>> GetAllDashboardChartsDatabyDateRangeAsync(DateTime startDate, DateTime endDate);
+        Task<IEnumerable<DashboardSummaryDto>> GetDashboardSummaryByDateRangeAsync(DateTime startDate, DateTime endDate, string category);
+        Task<IEnumerable<DashboardDetailsDto>> GetDashboardDetailsByDateAsync(DateTime date, string category, string type);
         Task<IEnumerable<AppointmentSchedule?>> GetPrimeCareAppointmentScheduleByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<AppointmentSchedule?>> GetCompletedPreScheduledAppointmentAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<AppointmentSchedule?>> GetAllPreScheduledAppointmentAsync(DateTime startDate, DateTime endDate);
@@ -20,7 +24,7 @@ namespace AyuLanka.AMS.Repositories.Contracts
         Task<AppointmentSchedule> UpdateAppointmentScheduleAsync(AppointmentSchedule appointmentSchedule);
         Task DeleteAppointmentScheduleAsync(int id, int deletedByUserId, string remark);
         Task<int> GetMaxChitNoAsync(DateTime scheduleDate);
-        Task<IEnumerable<object>> SearchPatientsAsync(string keyword);
+        Task<IEnumerable<AppointmentSchedule>> GetCustomerDetailsByIdAsync(int customerId);
         Task<bool> IsTokenExistsAsync(int tokenNo, DateTime scheduleDate, int? excludeAppointmentId = null);
     }
 }

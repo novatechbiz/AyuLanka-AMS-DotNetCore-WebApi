@@ -89,6 +89,25 @@ namespace AyuLanka.AMS.BusinessSevices
         {
             return await _appointmentScheduleRepository.GetAllAppointmentScheduleByDateRangeAsync(startDate, endDate);
         }
+        public async Task<IEnumerable<DashboardDateChartDto?>> GetAllDashboardChartsDatabyDateRangeAsync(DateTime startDate, DateTime endDate)
+        {
+            return await _appointmentScheduleRepository.GetAllDashboardChartsDatabyDateRangeAsync(startDate, endDate);
+        }
+
+        public async Task<IEnumerable<DashboardSummaryDto>> GetDashboardSummaryByDateRangeAsync(DateTime startDate, DateTime endDate, string category)
+        {
+            return await _appointmentScheduleRepository.GetDashboardSummaryByDateRangeAsync(startDate, endDate, category);
+        }
+
+        public async Task<IEnumerable<DashboardDetailsDto>> GetDashboardDetailsByDateAsync(DateTime date, string category, string type)
+        {
+            return await _appointmentScheduleRepository.GetDashboardDetailsByDateAsync(date, category, type);
+        }
+
+        public async Task<IEnumerable<AppointmentSchedule?>> GetCustomerDetailsByIdAsync(int customerId)
+        {
+            return await _appointmentScheduleRepository.GetCustomerDetailsByIdAsync(customerId);
+        }
 
         public async Task<IEnumerable<object>> SearchPatientsAsync(string keyword)
         {
@@ -275,12 +294,12 @@ namespace AyuLanka.AMS.BusinessSevices
                         if (appointmentScheduleRequestModel.LocationId.HasValue)
                         {
                             location_id = (int)appointmentScheduleRequestModel.LocationId;
-                        } else
+                        }
+                        else
                         {
                             var location = await _locationRepository.GetTreatmentLocationByNameAsync("Elite Care Waiting");
                             location_id = location.Id;
                         }
-                        
                     }
 
                     var newAppointment = new AppointmentSchedule()
@@ -310,7 +329,6 @@ namespace AyuLanka.AMS.BusinessSevices
                     };
 
                     appointmentResult = await _appointmentScheduleRepository.AddAppointmentScheduleAsync(newAppointment);
-
                 }
                 else
                 {
@@ -328,7 +346,6 @@ namespace AyuLanka.AMS.BusinessSevices
                             var location = await _locationRepository.GetTreatmentLocationByNameAsync("Doctor Room Waiting");
                             location_id = location.Id;
                         }
-                            
                     }
                     else
                     {
@@ -341,21 +358,17 @@ namespace AyuLanka.AMS.BusinessSevices
                             var location = await _locationRepository.GetTreatmentLocationByNameAsync("Elite Care Waiting");
                             location_id = location.Id;
                         }
-
                     }
 
-                    // Get max chitNo from repository
-                    var maxChitNo = await _appointmentScheduleRepository.GetMaxChitNoAsync(appointmentScheduleRequestModel.ScheduleDate);
-
-                    existingAppointment.CustomerId = appointmentScheduleRequestModel.CustomerId != 0 ? 
+                    existingAppointment.CustomerId = appointmentScheduleRequestModel.CustomerId != 0 ?
                                                     appointmentScheduleRequestModel.CustomerId : existingAppointment.CustomerId;
                     existingAppointment.CustomerName = appointmentScheduleRequestModel.CustomerName;
                     existingAppointment.ContactNo = appointmentScheduleRequestModel.ContactNo;
-                    existingAppointment.EmployeeId = appointmentScheduleRequestModel.EmployeeId != 0 
+                    existingAppointment.EmployeeId = appointmentScheduleRequestModel.EmployeeId != 0
                                                     ? appointmentScheduleRequestModel.EmployeeId : null;
-                    existingAppointment.SecondaryEmployeeId = appointmentScheduleRequestModel.SecondaryEmployeeId != 0 
+                    existingAppointment.SecondaryEmployeeId = appointmentScheduleRequestModel.SecondaryEmployeeId != 0
                                                     ? appointmentScheduleRequestModel.SecondaryEmployeeId : null;
-                    existingAppointment.DoctorEmployeeId = appointmentScheduleRequestModel.DoctorEmployeeId != 0 
+                    existingAppointment.DoctorEmployeeId = appointmentScheduleRequestModel.DoctorEmployeeId != 0
                                                     ? appointmentScheduleRequestModel.DoctorEmployeeId : null;
                     existingAppointment.ScheduleDate = appointmentScheduleRequestModel.ScheduleDate;
                     existingAppointment.LocationId = location_id;
@@ -367,40 +380,44 @@ namespace AyuLanka.AMS.BusinessSevices
                     existingAppointment.ActualToTimeSecond = appointmentScheduleRequestModel.ActualToTimeSecond;
                     existingAppointment.UpdatedBy = appointmentScheduleRequestModel.EnteredBy;
                     existingAppointment.UpdatedDate = DateTime.Now;
-                    existingAppointment.TokenNo = appointmentScheduleRequestModel.TokenNo != null 
+                    existingAppointment.TokenNo = appointmentScheduleRequestModel.TokenNo != null
                                                     ? appointmentScheduleRequestModel.TokenNo : existingAppointment.TokenNo;
-                    existingAppointment.MainTreatmentArea = appointmentScheduleRequestModel.MainTreatmentArea != null 
+                    existingAppointment.MainTreatmentArea = appointmentScheduleRequestModel.MainTreatmentArea != null
                                                     ? appointmentScheduleRequestModel.MainTreatmentArea : existingAppointment.MainTreatmentArea;
                     existingAppointment.Remarks = appointmentScheduleRequestModel.Remarks;
-                    existingAppointment.IsPatientContacted = appointmentScheduleRequestModel.IsPatientContacted != null 
+                    existingAppointment.IsPatientContacted = appointmentScheduleRequestModel.IsPatientContacted != null
                                                     ? appointmentScheduleRequestModel.IsPatientContacted : existingAppointment.IsPatientContacted;
 
+                    // Only assign a new ChitNo if token is being issued AND one hasn't been assigned yet.
+                    // Guarding here prevents a duplicate/concurrent request from reading a higher maxChitNo
+                    // and overwriting the already-assigned ChitNo, which burns a number and creates gaps.
                     if (appointmentScheduleRequestModel.IsTokenIssued)
                     {
-                        existingAppointment.ChitNo = maxChitNo + 1;
-                    } else
-                    {
-                        existingAppointment.ChitNo = existingAppointment.ChitNo;
+                        if (existingAppointment.ChitNo == null)
+                        {
+                            var maxChitNo = await _appointmentScheduleRepository.GetMaxChitNoAsync(appointmentScheduleRequestModel.ScheduleDate);
+                            existingAppointment.ChitNo = maxChitNo + 1;
+                        }
                     }
-                        
 
                     if (existingAppointment.TokenNo == null && appointmentScheduleRequestModel.TokenNo != null)
                     {
                         existingAppointment.TokenIssueTime = DateTime.Now;
                     }
-                      
+
                     appointmentResult = await _appointmentScheduleRepository.UpdateAppointmentScheduleAsync(existingAppointment);
 
                     var enterdByUser = await _employeeRepository.GetEmployeeByIdAsync(appointmentResult.EnteredBy);
                     appointmentResult.EnteredByEmployee = enterdByUser;
 
-                    var locationSub = appointmentResult.Location != null ? appointmentResult.Location 
+                    var locationSub = appointmentResult.Location != null ? appointmentResult.Location
                         : await _locationRepository.GetLocationByLocationIdAsync((int)appointmentResult.LocationId);
-                        
+
                     if (locationSub != null)
                     {
                         var locationTypeName = locationSub.LocationTypeId == 1 ? "Prime Care Wing" : "Elite Care Wing";
                         var customerName = appointmentResult.CustomerName;
+
                         // 🔹 Insert into other DB if TokenNo newly issued
                         if (appointmentScheduleRequestModel.IsTokenIssued)
                         {
@@ -420,6 +437,7 @@ namespace AyuLanka.AMS.BusinessSevices
                 return appointmentResult;
             }
         }
+
 
         public async Task<AppointmentSchedule> UpdateAppointmentScheduleAsync(AppointmentSchedule AppointmentSchedule)
         {
